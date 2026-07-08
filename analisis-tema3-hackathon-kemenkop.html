@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bedah Tema 3 — Keterlibatan Masyarakat dalam Berkoperasi · Hackathon Kemenkop 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --petrol-950:#082B34;
+    --petrol-900:#0B3540;
+    --petrol-800:#0F4351;
+    --petrol-700:#14505C;
+    --cyan-500:#1E9FD0;
+    --cyan-300:#7CC9E6;
+    --gold-500:#E8A61F;
+    --gold-300:#F3C965;
+    --olive-500:#93A83B;
+    --paper:#F1F6F6;
+    --card:#FFFFFF;
+    --line:#D8E4E5;
+    --ink-900:#122F36;
+    --ink-600:#3E5A61;
+    --ink-400:#6B8288;
+    --radius:14px;
+    --disp:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --body:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    background:var(--paper);
+    color:var(--ink-900);
+    font-size:16.5px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:0 28px}
+  a{color:var(--petrol-700)}
+  ::selection{background:var(--gold-300);color:var(--petrol-950)}
+
+  /* ---------- eyebrow / labels ---------- */
+  .eyebrow{
+    font-family:var(--mono);font-size:11.5px;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--gold-500);
+  }
+  .sec-mark{
+    font-family:var(--mono);font-weight:600;font-size:13px;
+    color:var(--gold-500);letter-spacing:.12em;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(160deg,var(--petrol-950) 0%,var(--petrol-900) 55%,var(--petrol-800) 100%);
+    color:#EAF4F6;position:relative;overflow:hidden;
+    padding:72px 0 56px;
+  }
+  .hero-shapes{position:absolute;right:-40px;top:-30px;width:520px;height:520px;opacity:.5;pointer-events:none}
+  .hero .eyebrow{display:block;margin-bottom:18px}
+  .hero h1{
+    font-family:var(--disp);font-weight:800;
+    font-size:clamp(32px,5vw,54px);line-height:1.08;
+    letter-spacing:-0.02em;max-width:760px;
+  }
+  .hero h1 em{font-style:normal;color:var(--cyan-300)}
+  .hero .lede{
+    margin-top:20px;max-width:640px;font-size:18px;color:#BFD8DE;
+  }
+  .ps-quote{
+    margin-top:30px;max-width:680px;
+    border-left:3px solid var(--gold-500);
+    padding:14px 20px;background:rgba(255,255,255,.05);
+    border-radius:0 10px 10px 0;
+  }
+  .ps-quote .q-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-300);display:block;margin-bottom:6px}
+  .ps-quote p{font-family:var(--disp);font-weight:600;font-size:17.5px;color:#F2FAFC;line-height:1.5}
+
+  /* timeline strip */
+  .tl{margin-top:44px}
+  .tl-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8FB4BC;margin-bottom:14px;display:block}
+  .tl-track{display:flex;flex-wrap:wrap;gap:10px}
+  .tl-step{
+    flex:1 1 130px;min-width:130px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;padding:12px 14px;
+  }
+  .tl-step .d{font-family:var(--mono);font-size:11px;color:#9FC4CB;display:block;margin-bottom:4px}
+  .tl-step .n{font-family:var(--disp);font-weight:700;font-size:13.5px;line-height:1.3;display:block}
+  .tl-step .s{font-size:11.5px;margin-top:5px;display:inline-block;font-family:var(--mono)}
+  .tl-done{opacity:.55}
+  .tl-done .s{color:var(--olive-500)}
+  .tl-now{background:rgba(232,166,31,.14);border-color:var(--gold-500)}
+  .tl-now .s{color:var(--gold-300)}
+  .tl-next{border-color:var(--cyan-500)}
+  .tl-next .s{color:var(--cyan-300)}
+  .tl-note{font-size:12.5px;color:#8FB4BC;margin-top:12px}
+
+  /* ---------- SECTIONS ---------- */
+  .section{padding:64px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:10px}
+  .sec-head h2{
+    font-family:var(--disp);font-weight:800;font-size:clamp(24px,3.2vw,32px);
+    letter-spacing:-0.015em;color:var(--petrol-900);
+  }
+  .sec-intro{max-width:720px;color:var(--ink-600);margin-bottom:30px}
+  .sec-intro strong{color:var(--ink-900)}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px 26px;
+  }
+  p + p{margin-top:14px}
+
+  /* ---------- A. exec summary ---------- */
+  .exec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .exec-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px}
+  .exec-card .k{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--cyan-500);display:block;margin-bottom:8px}
+  .exec-card .t{font-family:var(--disp);font-weight:700;font-size:16.5px;color:var(--petrol-900);display:block;margin-bottom:6px;line-height:1.35}
+  .exec-card p{font-size:14.5px;color:var(--ink-600)}
+
+  /* ---------- B. funnel (signature) ---------- */
+  .funnel{margin-top:34px}
+  .funnel-band{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:end}
+  .fstage{display:flex;flex-direction:column}
+  .fbar{
+    border-radius:10px 10px 0 0;position:relative;
+    display:flex;align-items:flex-end;padding:10px 12px;
+  }
+  .fbar .pct{font-family:var(--mono);font-weight:600;font-size:12px;color:rgba(255,255,255,.9)}
+  .f1 .fbar{height:150px;background:linear-gradient(180deg,#14505C,#0B3540)}
+  .f2 .fbar{height:122px;background:linear-gradient(180deg,#1B7A9C,#14505C)}
+  .f3 .fbar{height:96px;background:linear-gradient(180deg,#1E9FD0,#1B7A9C)}
+  .f4 .fbar{height:72px;background:linear-gradient(180deg,#E8A61F,#D19017)}
+  .f5 .fbar{height:52px;background:linear-gradient(180deg,#93A83B,#7E9130)}
+  .fbody{
+    background:var(--card);border:1px solid var(--line);border-top:none;
+    border-radius:0 0 10px 10px;padding:14px 14px 16px;flex:1;
+  }
+  .fbody .fn{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-400);text-transform:uppercase;display:block}
+  .fbody .ft{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--petrol-900);display:block;margin:2px 0 8px}
+  .fbody .leak{font-size:12.8px;color:var(--ink-600);line-height:1.5}
+  .fbody .leak b{color:#B0721A;font-weight:600}
+  .cq-tag{
+    display:inline-block;margin-top:10px;
+    font-family:var(--mono);font-size:10.5px;font-weight:600;
+    background:#EAF4F8;color:var(--petrol-700);
+    border:1px solid #CFE4EC;border-radius:6px;padding:2px 7px;
+  }
+  .funnel-note{margin-top:18px;font-size:14px;color:var(--ink-600);max-width:760px}
+
+  /* ---------- C. arah solusi ---------- */
+  .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .dir{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column}
+  .dir.rec{border:2px solid var(--cyan-500);position:relative}
+  .dir.rec::before{
+    content:"BASIS YANG DISARANKAN";position:absolute;top:-11px;left:18px;
+    font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    background:var(--cyan-500);color:#fff;border-radius:6px;padding:3px 9px;
+  }
+  .dir h3{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--petrol-900);margin-bottom:8px}
+  .dir p{font-size:14.5px;color:var(--ink-600)}
+  .dir .verdict{margin-top:auto;padding-top:14px;font-size:13px;font-family:var(--mono)}
+  .v-plus{color:#5C7A18}
+  .v-min{color:#B0721A}
+
+  .origin-box{
+    margin-top:26px;background:#FDF6E7;border:1px solid #EED9A6;
+    border-radius:var(--radius);padding:20px 24px;display:flex;gap:16px;align-items:flex-start;
+  }
+  .origin-box .ic{flex:0 0 auto;width:38px;height:38px;border-radius:10px;background:var(--gold-500);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:18px}
+  .origin-box p{font-size:14.5px;color:#5C4A1E}
+  .origin-box b{color:#3E3110}
+
+  /* ---------- D. fitur ---------- */
+  .tier{margin-top:34px}
+  .tier-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .tier-pill{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;border-radius:7px;padding:4px 10px;text-transform:uppercase}
+  .tp-core{background:var(--petrol-900);color:#fff}
+  .tp-diff{background:var(--cyan-500);color:#fff}
+  .tp-later{background:#E3EBEC;color:var(--ink-600)}
+  .tier-head h3{font-family:var(--disp);font-weight:700;font-size:18px;color:var(--petrol-900)}
+  .tier-head .hint{font-size:13px;color:var(--ink-400);margin-left:auto;font-family:var(--mono)}
+  .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .feat .top{display:flex;align-items:baseline;gap:10px}
+  .feat h4{font-family:var(--disp);font-weight:700;font-size:15.5px;color:var(--petrol-900);flex:1}
+  .effort{font-family:var(--mono);font-size:11px;font-weight:600;border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .e-s{background:#EAF3DC;color:#5C7A18}
+  .e-m{background:#FDF0D3;color:#B0721A}
+  .e-l{background:#FBE3DF;color:#B3452F}
+  .feat p{font-size:13.8px;color:var(--ink-600);margin-top:6px}
+  .feat .meta{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+  .meta span{font-family:var(--mono);font-size:10.5px;background:#F0F5F6;border:1px solid var(--line);color:var(--ink-600);border-radius:6px;padding:2px 7px}
+  .later-list{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px 20px;font-size:14px;color:var(--ink-600)}
+
+  /* ---------- E. arsitektur ---------- */
+  .stack-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:26px}
+  .stack-table th,.stack-table td{padding:13px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px;vertical-align:top}
+  .stack-table th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-400);background:#F7FAFA}
+  .stack-table td:first-child{font-family:var(--disp);font-weight:700;color:var(--petrol-900);white-space:nowrap}
+  .stack-table tr:last-child td{border-bottom:none}
+  .stack-table .alt{color:var(--ink-400);font-size:13px;display:block;margin-top:3px}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+  .role{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .role .r{font-family:var(--mono);font-size:11px;color:var(--cyan-500);letter-spacing:.1em;text-transform:uppercase}
+  .role h4{font-family:var(--disp);font-weight:700;font-size:15px;margin:4px 0 6px;color:var(--petrol-900)}
+  .role p{font-size:13.5px;color:var(--ink-600)}
+
+  /* ---------- F. OWASP ---------- */
+  .sec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:26px}
+  .risk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .risk .code{font-family:var(--mono);font-size:11px;font-weight:600;color:#B3452F;background:#FBE9E6;border-radius:6px;padding:2px 8px;display:inline-block;margin-bottom:8px}
+  .risk h4{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--petrol-900)}
+  .risk p{font-size:13.8px;color:var(--ink-600);margin-top:5px}
+  .risk p b{color:#256327;font-weight:600}
+  .pdp-note{margin-top:16px;background:#EAF3F7;border:1px solid #C9E0EB;border-radius:12px;padding:18px 22px;font-size:14.5px;color:var(--petrol-800)}
+
+  /* ---------- G. kriteria ---------- */
+  .crit{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+  .crit-row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+  .crit-top{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+  .crit-top h4{font-family:var(--disp);font-weight:700;font-size:15.5px;color:var(--petrol-900);flex:1}
+  .crit-top .w{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--petrol-700)}
+  .bar{height:8px;border-radius:5px;background:#E8EFF0;overflow:hidden;margin-bottom:10px}
+  .bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--cyan-500),var(--petrol-700))}
+  .crit-row p{font-size:13.8px;color:var(--ink-600)}
+  .crit-foot{font-size:12.5px;color:var(--ink-400);margin-top:14px}
+
+  /* ---------- H. aturan ---------- */
+  .rules-band{
+    margin-top:26px;background:linear-gradient(150deg,#0B3540,#14505C);
+    border-radius:var(--radius);padding:30px;color:#E8F2F4;
+  }
+  .rules-band h3{font-family:var(--disp);font-weight:800;font-size:20px;margin-bottom:6px}
+  .rules-band .sub{font-size:14px;color:#A9C9D0;margin-bottom:22px}
+  .ok-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .ok-col{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:18px 20px}
+  .ok-col h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+  .ok-col.yes h4{color:#B9D77A}
+  .ok-col.no h4{color:#F2B0A2}
+  .ok-col ul{list-style:none}
+  .ok-col li{font-size:14px;padding:7px 0 7px 26px;position:relative;color:#DCEBEE;border-bottom:1px solid rgba(255,255,255,.07)}
+  .ok-col li:last-child{border-bottom:none}
+  .ok-col.yes li::before{content:"✓";position:absolute;left:2px;color:#B9D77A;font-weight:700}
+  .ok-col.no li::before{content:"✕";position:absolute;left:2px;color:#F2B0A2;font-weight:700}
+  .rule-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+  .rule-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .rule-card h4{font-family:var(--disp);font-weight:700;font-size:15px;color:var(--petrol-900);display:flex;gap:8px;align-items:center}
+  .rule-card h4 .tag{font-family:var(--mono);font-size:10px;background:#FDF0D3;color:#B0721A;border-radius:5px;padding:2px 7px}
+  .rule-card p{font-size:13.8px;color:var(--ink-600);margin-top:6px}
+  .tpl{
+    margin-top:18px;background:#F7FAFA;border:1px solid var(--line);
+    border-radius:12px;padding:18px 22px;
+  }
+  .tpl .t-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-400);display:block;margin-bottom:8px}
+  .tpl p{font-size:14px;color:var(--petrol-800);font-style:italic;line-height:1.7}
+
+  /* ---------- I. deliverables ---------- */
+  .del-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;margin-top:26px}
+  .check-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px}
+  .check-card h3{font-family:var(--disp);font-weight:700;font-size:17px;color:var(--petrol-900);margin-bottom:14px}
+  .chk{list-style:none}
+  .chk li{padding:9px 0;border-bottom:1px solid #EDF3F3;display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--ink-600)}
+  .chk li:last-child{border-bottom:none}
+  .chk input[type=checkbox]{
+    appearance:none;width:19px;height:19px;flex:0 0 auto;margin-top:2px;
+    border:2px solid var(--cyan-500);border-radius:5px;cursor:pointer;position:relative;
+  }
+  .chk input[type=checkbox]:checked{background:var(--cyan-500)}
+  .chk input[type=checkbox]:checked::after{
+    content:"✓";color:#fff;font-size:13px;font-weight:700;position:absolute;top:-1px;left:3px;
+  }
+  .chk li b{color:var(--ink-900)}
+  .deck{counter-reset:slide;list-style:none}
+  .deck li{
+    counter-increment:slide;padding:8px 0 8px 44px;position:relative;
+    font-size:14.3px;color:var(--ink-600);border-bottom:1px solid #EDF3F3;
+  }
+  .deck li:last-child{border-bottom:none}
+  .deck li::before{
+    content:counter(slide,decimal-leading-zero);
+    position:absolute;left:0;top:9px;
+    font-family:var(--mono);font-size:12px;font-weight:600;color:var(--gold-500);
+  }
+  .deck li b{color:var(--ink-900);font-weight:600}
+  .deadline-warn{
+    margin-top:20px;background:#FBE9E6;border:1px solid #F0C4BB;border-radius:12px;
+    padding:16px 22px;font-size:14.5px;color:#7C2D1C;display:flex;gap:12px;align-items:flex-start;
+  }
+  .deadline-warn b{color:#5E1F12}
+
+  /* ---------- footer ---------- */
+  footer{margin-top:80px;background:var(--petrol-950);color:#9FC4CB;padding:44px 0 52px}
+  footer .f-title{font-family:var(--disp);font-weight:700;color:#E8F2F4;font-size:17px;margin-bottom:8px}
+  footer p{font-size:13.5px;max-width:720px}
+  footer .src{margin-top:18px;font-family:var(--mono);font-size:11.5px;color:#6E959D}
+
+  /* ---------- reveal ---------- */
+  .rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .exec-grid,.dir-grid,.roles{grid-template-columns:1fr 1fr}
+    .funnel-band{grid-template-columns:repeat(2,1fr);align-items:stretch}
+    .fbar{height:14px !important;border-radius:10px 10px 0 0}
+    .fbar .pct{display:none}
+    .del-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    body{font-size:15.5px}
+    .wrap{padding:0 20px}
+    .exec-grid,.dir-grid,.feat-grid,.sec-grid,.ok-grid,.rule-cards,.roles{grid-template-columns:1fr}
+    .funnel-band{grid-template-columns:1fr}
+    .hero{padding:56px 0 44px}
+    .stack-table td:first-child{white-space:normal}
+  }
+  :focus-visible{outline:3px solid var(--gold-500);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <svg class="hero-shapes" viewBox="0 0 520 520" fill="none" aria-hidden="true">
+    <path d="M340 60c40-28 96-18 122 22 26 40 14 94-26 120l-70 46c-18 12-24 36-12 54 12 18 36 24 54 12l26-17" stroke="#93A83B" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="150" cy="150" r="52" stroke="#7CC9E6" stroke-width="10"/>
+    <path d="M90 320l60 90c14 22 44 28 66 14l88-58" stroke="#7CC9E6" stroke-width="10" stroke-linecap="round"/>
+    <path d="M420 330c30 8 48 40 40 70-8 30-40 48-70 40l-52-14" stroke="#E8A61F" stroke-width="10" stroke-linecap="round"/>
+  </svg>
+  <div class="wrap">
+    <span class="eyebrow">Hackathon Digital Cooperatives Expo 2026 · Kemenkop RI</span>
+    <h1>Bedah Tema 3 —<br>Keterlibatan Masyarakat <em>dalam Berkoperasi</em></h1>
+    <p class="lede">Analisis masalah, rekomendasi fitur MVP, strategi penilaian, dan rambu aturan main — disusun sebagai bahan riset pendukung untuk tim kamu menjelang sprint.</p>
+
+    <div class="ps-quote">
+      <span class="q-label">Problem Statement resmi (TOR, Tema 3-B)</span>
+      <p>"Bagaimana teknologi dapat meningkatkan partisipasi dan keterlibatan masyarakat dalam ekosistem koperasi?"</p>
+    </div>
+
+    <div class="tl">
+      <span class="tl-label">Posisi di timeline TOR · hari ini 7 Juli 2026</span>
+      <div class="tl-track">
+        <div class="tl-step tl-done"><span class="d">12–29 Jun</span><span class="n">Registrasi &amp; Open Call</span><span class="s">selesai</span></div>
+        <div class="tl-step tl-done"><span class="d">22 Jun–1 Jul</span><span class="n">Kurasi Teknis &amp; Substansi</span><span class="s">selesai</span></div>
+        <div class="tl-step tl-done"><span class="d">3–5 Jul</span><span class="n">Online Mentorship</span><span class="s">selesai</span></div>
+        <div class="tl-step tl-now"><span class="d">6–7 Jul</span><span class="n">Undangan Pitching Day</span><span class="s">● sekarang</span></div>
+        <div class="tl-step tl-next"><span class="d">10–11 Jul</span><span class="n">Sprint 24–36 Jam + Pitching</span><span class="s">H-3</span></div>
+        <div class="tl-step"><span class="d">12 Jul</span><span class="n">Awarding Day</span><span class="s" style="color:#8FB4BC">—</span></div>
+      </div>
+      <p class="tl-note">*Timeline TOR bersifat tentatif dan dapat berubah — selalu cek info resmi panitia. Intinya: waktu persiapan tinggal hitungan hari, jadi keputusan lingkup fitur harus dikunci sekarang.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ================= A. RINGKASAN ================= -->
+<section class="section" id="ringkasan">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">A.</span><h2>Ringkasan Eksekutif</h2></div>
+    <p class="sec-intro">Tiga kesimpulan utama dari membaca TOR secara keseluruhan — bukan hanya halaman Tema 3-nya.</p>
+    <div class="exec-grid">
+      <div class="exec-card">
+        <span class="k">Inti masalah</span>
+        <span class="t">Partisipasi bukan satu masalah — ia bocor di lima tahap berbeda.</span>
+        <p>Dari kenal → gabung → transaksi → aktif → bersuara. TOR menyediakan data usia, aktivitas, dan transaksi anggota: sinyal kuat bahwa juri mencari solusi <b>berbasis data</b>, bukan sekadar "bikin aplikasi koperasi".</p>
+      </div>
+      <div class="exec-card">
+        <span class="k">Arah yang masuk akal</span>
+        <span class="t">Satu platform keterlibatan dengan satu diferensiasi tajam.</span>
+        <p>Tulang punggung: transparansi + gamifikasi + e-RAT. Lalu pilih <b>satu</b> pembeda (mis. skor keterlibatan anggota). Jangan coba bangun "super app segalanya" dalam sprint 24–36 jam.</p>
+      </div>
+      <div class="exec-card">
+        <span class="k">Kunci menang</span>
+        <span class="t">Relevansi 25% dimenangkan lewat framing data, bukan fitur.</span>
+        <p>Demo yang stabil mengunci Kualitas Teknologi 15%. Dan kepatuhan aturan (disclosure AI, deadline, orisinalitas) menjaga tim tetap di arena — telat 1 detik saja gugur.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= B. FUNNEL ================= -->
+<section class="section" id="funnel">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">B.</span><h2>Bedah Masalah: Funnel Keterlibatan</h2></div>
+    <p class="sec-intro">Empat <em>challenge questions</em> di TOR sebenarnya memetakan satu funnel yang bocor. Kalau tim kamu bisa menunjukkan <strong>di tahap mana bocornya paling besar (pakai data)</strong>, lalu mendemokan fitur yang menambalnya — itu cerita pitch yang utuh.</p>
+
+    <div class="funnel">
+      <div class="funnel-band">
+        <div class="fstage f1">
+          <div class="fbar"><span class="pct">Tahap 1</span></div>
+          <div class="fbody">
+            <span class="fn">Kenal</span>
+            <span class="ft">Tahu &amp; tertarik</span>
+            <p class="leak"><b>Bocor:</b> citra koperasi terasa kuno dan kurang relevan bagi masyarakat digital.</p>
+            <span class="cq-tag">CQ-1 · kenapa belum tertarik?</span>
+          </div>
+        </div>
+        <div class="fstage f2">
+          <div class="fbar"><span class="pct">Tahap 2</span></div>
+          <div class="fbody">
+            <span class="fn">Gabung</span>
+            <span class="ft">Jadi anggota</span>
+            <p class="leak"><b>Bocor:</b> pendaftaran manual, syarat tidak jelas, harus datang ke kantor.</p>
+            <span class="cq-tag">CQ-4 · kemudahan layanan</span>
+          </div>
+        </div>
+        <div class="fstage f3">
+          <div class="fbar"><span class="pct">Tahap 3</span></div>
+          <div class="fbody">
+            <span class="fn">Transaksi</span>
+            <span class="ft">Simpan · pinjam · belanja</span>
+            <p class="leak"><b>Bocor:</b> pengalaman kalah jauh dari bank digital &amp; e-wallet; saldo dan SHU tidak transparan.</p>
+            <span class="cq-tag">CQ-4 · transparansi</span>
+          </div>
+        </div>
+        <div class="fstage f4">
+          <div class="fbar"><span class="pct">Tahap 4</span></div>
+          <div class="fbody">
+            <span class="fn">Aktif</span>
+            <span class="ft">Ikut kegiatan</span>
+            <p class="leak"><b>Bocor:</b> komunikasi satu arah, tidak ada insentif untuk terus terlibat.</p>
+            <span class="cq-tag">CQ-3 · engagement berkelanjutan</span>
+          </div>
+        </div>
+        <div class="fstage f5">
+          <div class="fbar"><span class="pct">Tahap 5</span></div>
+          <div class="fbody">
+            <span class="fn">Bersuara</span>
+            <span class="ft">RAT &amp; keputusan</span>
+            <p class="leak"><b>Bocor:</b> RAT setahun sekali, wajib hadir fisik — generasi muda paling tersisih di sini.</p>
+            <span class="cq-tag">CQ-2 · usia partisipasi terendah</span>
+          </div>
+        </div>
+      </div>
+      <p class="funnel-note">Data TOR yang bisa dipakai untuk membuktikan bocornya funnel: <b>klasifikasi usia anggota</b> (tunjukkan gap generasi muda), <b>data aktivitas &amp; transaksi anggota</b> (bedakan anggota aktif vs pasif), dan <b>persebaran anggota</b> (tunjukkan ketimpangan wilayah). Referensi database ada di bagian K TOR — eksplor lebih dulu sebelum sprint.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= C. ARAH SOLUSI ================= -->
+<section class="section" id="arah">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">C.</span><h2>Arah Solusi &amp; Positioning</h2></div>
+    <p class="sec-intro">TOR memberi enam contoh solusi (Super App, Loyalty, e-RAT, Gamifikasi, Community Platform, AI Assistant). Itu <strong>menu inspirasi, bukan daftar belanja</strong>. Berikut perbandingan tiga arah besar sebagai bahan diskusi tim:</p>
+
+    <div class="dir-grid">
+      <div class="dir">
+        <h3>Arah 1 · Super App Anggota</h3>
+        <p>Semua layanan koperasi dalam satu aplikasi: simpanan, pinjaman, belanja, info, komunitas.</p>
+        <p class="verdict"><span class="v-plus">+ relevansi luas, mudah dipahami juri</span><br><span class="v-min">− risiko dangkal di semua sisi; banyak yang sudah eksis → skor inovasi rentan rendah</span></p>
+      </div>
+      <div class="dir rec">
+        <h3>Arah 2 · Platform Keterlibatan Berbasis Data</h3>
+        <p>Fokus menambal funnel tengah–akhir: transparansi (dashboard &amp; SHU), gamifikasi, e-RAT, plus analitik pengurus yang membaca data usia &amp; aktivitas.</p>
+        <p class="verdict"><span class="v-plus">+ menjawab 4 challenge question sekaligus; feasible dalam sprint; cerita data kuat</span><br><span class="v-min">− butuh diferensiasi tajam agar tidak terlihat "aplikasi anggota biasa"</span></p>
+      </div>
+      <div class="dir">
+        <h3>Arah 3 · AI Assistant sebagai Produk Utama</h3>
+        <p>Asisten AI yang menjawab pertanyaan anggota, memandu layanan, dan mengedukasi.</p>
+        <p class="verdict"><span class="v-plus">+ efek "wow" tinggi</span><br><span class="v-min">− rawan gesekan dengan aturan orisinalitas &amp; sulit dijamin stabil saat demo — lebih aman jadi fitur pendukung, bukan produk inti</span></p>
+      </div>
+    </div>
+
+    <div class="origin-box">
+      <div class="ic">!</div>
+      <p><b>Penting soal orisinalitas (Aturan J TOR):</b> gagasan, konsep, dan tema utama solusi <b>wajib lahir dari pemikiran tim kamu sendiri</b> — bukan dihasilkan langsung oleh AI. Perlakukan dokumen ini sebagai riset pendukung dan bahan pertimbangan (penggunaan yang diperbolehkan TOR), lalu <b>diskusikan, tantang, modifikasi, dan putuskan konsep finalnya bersama tim</b>. Saat <em>live defense</em>, juri akan menguji seberapa dalam kalian memahami dan memiliki ide tersebut.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= D. FITUR ================= -->
+<section class="section" id="fitur">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">D.</span><h2>Perkiraan Fitur MVP</h2></div>
+    <p class="sec-intro">Dibagi tiga tingkat prioritas untuk sprint 24–36 jam. Estimasi usaha: <strong>S</strong> (≈2–4 jam), <strong>M</strong> (≈5–10 jam), <strong>L</strong> (10+ jam, hati-hati). Enam fitur inti + satu diferensiasi sudah lebih dari cukup untuk demo yang meyakinkan.</p>
+
+    <div class="tier">
+      <div class="tier-head"><span class="tier-pill tp-core">Inti</span><h3>Wajib ada &amp; wajib jalan saat demo</h3><span class="hint">target: 6 fitur</span></div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="top"><h4>Pendaftaran Anggota Digital</h4><span class="effort e-m">M</span></div>
+          <p>Registrasi online + verifikasi ringan + profil anggota. Menutup bocor tahap "Gabung" — dari datang ke kantor menjadi 5 menit dari HP.</p>
+          <div class="meta"><span>Funnel: Gabung</span><span>Data: persebaran anggota</span><span>Kriteria: Relevansi</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Dashboard Transparansi Anggota</h4><span class="effort e-m">M</span></div>
+          <p>Saldo simpanan, riwayat transaksi, dan <b>estimasi SHU berjalan</b> yang update real-time. Ini jawaban paling langsung untuk isu transparansi di CQ-4 — dan momen "aha" untuk juri.</p>
+          <div class="meta"><span>Funnel: Transaksi</span><span>Data: transaksi anggota</span><span>Kriteria: Relevansi + Dampak</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>e-RAT &amp; Voting Digital</h4><span class="effort e-m">M</span></div>
+          <p>Agenda rapat, voting keputusan, penghitungan kuorum, dan hasil live. Selaras persis dengan contoh solusi TOR "Digital Voting dan e-RAT" — partisipasi keputusan tanpa harus hadir fisik.</p>
+          <div class="meta"><span>Funnel: Bersuara</span><span>Data: jumlah anggota</span><span>Kriteria: Inovasi + Dampak</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Gamifikasi: Misi, Poin &amp; Lencana</h4><span class="effort e-m">M</span></div>
+          <p>Misi mingguan (menabung, hadir kegiatan, voting), poin yang bisa ditukar benefit, leaderboard antar anggota. Mesin utama untuk engagement berkelanjutan (CQ-3).</p>
+          <div class="meta"><span>Funnel: Aktif</span><span>Data: aktivitas anggota</span><span>Kriteria: Inovasi</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Pusat Kegiatan &amp; Notifikasi</h4><span class="effort e-s">S</span></div>
+          <p>Pengumuman, kalender kegiatan, RSVP kehadiran. Sederhana, tapi menghidupkan rasa "koperasi ini aktif" di dalam aplikasi.</p>
+          <div class="meta"><span>Funnel: Aktif</span><span>Kriteria: Kemudahan Implementasi</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Panel Analitik Pengurus</h4><span class="effort e-m">M</span></div>
+          <p>Segmentasi anggota per usia (jawaban langsung CQ-2), deteksi anggota pasif, tren transaksi &amp; kehadiran. Menunjukkan sisi "berbasis data" dari solusi kalian.</p>
+          <div class="meta"><span>Data: usia + aktivitas</span><span>Kriteria: Relevansi + Teknologi</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head"><span class="tier-pill tp-diff">Diferensiasi</span><h3>Pilih 1–2 sebagai pembeda — kembangkan dengan pemikiran tim</h3></div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="top"><h4>Skor Keterlibatan Anggota</h4><span class="effort e-m">M</span></div>
+          <p>Indeks tunggal (mis. 0–100) yang menggabungkan frekuensi transaksi, kehadiran kegiatan, dan partisipasi voting. Jadi "bahasa bersama" antara anggota dan pengurus — dan metrik dampak yang terukur di pitch.</p>
+          <div class="meta"><span>Nilai jual: Inovasi + Dampak</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Re-aktivasi Anggota Pasif Otomatis</h4><span class="effort e-m">M</span></div>
+          <p>Sistem mendeteksi anggota yang tidak aktif ≥ N bulan lalu mengirim misi/penawaran tertarget. Dari analitik pasif menjadi <b>aksi</b> — loop yang jarang ada di aplikasi koperasi eksisting.</p>
+          <div class="meta"><span>Nilai jual: Inovasi</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>AI Member Assistant (fitur pendukung)</h4><span class="effort e-l">L</span></div>
+          <p>Chatbot tanya-jawab layanan koperasi ("cara pinjam?", "SHU saya berapa?"). Kalau dipakai: batasi cakupan, siapkan fallback, dan <b>wajib dicantumkan di disclosure AI</b>.</p>
+          <div class="meta"><span>Risiko demo: sedang</span><span>Wajib disclosure</span></div>
+        </div>
+        <div class="feat">
+          <div class="top"><h4>Kesiapan Integrasi SIMKOPDES</h4><span class="effort e-s">S</span></div>
+          <p>Desain skema data &amp; endpoint yang selaras dengan ekosistem SIMKOPDES + jelaskan di README/arsitektur. Murah dikerjakan, tapi tepat menyasar tujuan TOR #5: "berpotensi diimplementasikan dalam ekosistem Kementerian".</p>
+          <div class="meta"><span>Nilai jual: Implementasi</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-head"><span class="tier-pill tp-later">Nanti dulu</span><h3>Jangan dikerjakan saat sprint (cukup disebut di roadmap)</h3></div>
+      <div class="later-list">
+        Marketplace produk anggota · mode offline penuh · multi-bahasa daerah · integrasi pembayaran nyata (payment gateway) · fitur pinjaman end-to-end dengan skoring kredit. Semua ini bagus untuk slide <em>roadmap</em>, tapi berbahaya untuk dikerjakan dalam 24–36 jam — setiap fitur setengah jadi menurunkan skor Kualitas Teknologi.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= E. ARSITEKTUR ================= -->
+<section class="section" id="arsitektur">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">E.</span><h2>Arsitektur &amp; Stack untuk Sprint 24–36 Jam</h2></div>
+    <p class="sec-intro">Prinsipnya satu: <strong>pakai stack yang paling dikuasai tim, bukan yang paling keren.</strong> Kecepatan dan kestabilan demo mengalahkan segalanya. Berikut satu konfigurasi yang terbukti cepat, dengan alternatifnya:</p>
+
+    <table class="stack-table">
+      <tr><th>Lapisan</th><th>Rekomendasi</th><th>Kenapa</th></tr>
+      <tr>
+        <td>Frontend</td>
+        <td>Next.js/React + Tailwind, dibungkus PWA<span class="alt">Alternatif: Flutter (jika tim kuat mobile &amp; ingin APK)</span></td>
+        <td>Cepat dirakit, responsif untuk demo di layar juri, dan PWA memenuhi bentuk solusi "Website/Web App" maupun "Aplikasi Mobile" di TOR.</td>
+      </tr>
+      <tr>
+        <td>Backend + DB</td>
+        <td>Supabase (Auth + PostgreSQL + Realtime)<span class="alt">Alternatif: Laravel / Express + PostgreSQL</span></td>
+        <td>Auth, database, dan realtime (untuk hasil voting live!) langsung jadi — menghemat 6–10 jam kerja backend.</td>
+      </tr>
+      <tr>
+        <td>Visualisasi</td>
+        <td>Recharts / Chart.js</td>
+        <td>Panel analitik pengurus &amp; dashboard SHU butuh grafik yang rapi dalam hitungan menit.</td>
+      </tr>
+      <tr>
+        <td>Data</td>
+        <td>Seed dari referensi database TOR (bagian K) + data dummy realistis</td>
+        <td>Demo dengan data yang "terasa nyata" (nama, usia, transaksi bervariasi) jauh lebih meyakinkan daripada tabel kosong.</td>
+      </tr>
+      <tr>
+        <td>Deploy</td>
+        <td>Vercel / Netlify (frontend) + Supabase cloud</td>
+        <td>URL publik aktif adalah deliverable wajib. Deploy sejak jam-jam awal sprint, jangan di menit akhir.</td>
+      </tr>
+    </table>
+
+    <div class="roles">
+      <div class="role"><span class="r">Peran 1</span><h4>Frontend &amp; UI</h4><p>Layout aplikasi anggota, dashboard, gamifikasi. Pegang skenario demo dari sisi tampilan.</p></div>
+      <div class="role"><span class="r">Peran 2</span><h4>Backend &amp; Data</h4><p>Skema DB, auth &amp; RBAC, seed data, endpoint voting realtime, panel analitik.</p></div>
+      <div class="role"><span class="r">Peran 3</span><h4>Produk, Deck &amp; Demo</h4><p>Pitch deck, README, disclosure AI, latihan pitching, rekam video demo cadangan ≤3 menit.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= F. KEAMANAN ================= -->
+<section class="section" id="keamanan">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">F.</span><h2>Keamanan: Standar OWASP Sejak MVP</h2></div>
+    <p class="sec-intro">TOR sendiri memasukkan <strong>keamanan siber</strong> dalam materi mentorship, dan kriteria umum menuntut teknologi yang "bertanggung jawab". Aplikasi kalian menyimpan data keuangan &amp; identitas anggota — jadi keamanan bukan opsional, dan justru bisa jadi nilai jual 30 detik di pitch. Fokus ke mitigasi cepat berikut (mengacu OWASP Top 10):</p>
+
+    <div class="sec-grid">
+      <div class="risk"><span class="code">A01 · Broken Access Control</span><h4>Pisahkan hak akses anggota vs pengurus</h4><p>Terapkan RBAC dan <b>validasi otorisasi di sisi server</b> — menyembunyikan tombol di UI saja tidak cukup. Anggota tidak boleh bisa membuka data anggota lain lewat ubah ID di URL.</p></div>
+      <div class="risk"><span class="code">A02 · Cryptographic Failures</span><h4>Lindungi kredensial &amp; data sensitif</h4><p>Hash password dengan <b>bcrypt/Argon2</b>, wajib HTTPS. Untuk MVP: <b>jangan minta/simpan foto KTP</b> di aplikasi demo — cukup simulasikan verifikasi.</p></div>
+      <div class="risk"><span class="code">A03 · Injection</span><h4>Tutup celah SQL injection &amp; XSS</h4><p>Gunakan <b>ORM / prepared statements</b> (Supabase/Laravel sudah default aman), validasi semua input, dan escape output di frontend.</p></div>
+      <div class="risk"><span class="code">A05 · Security Misconfiguration</span><h4>Repo publik = risiko bocor secret</h4><p>Repositori <b>wajib publik</b> per TOR — jadi semua API key &amp; kredensial harus di environment variable. Commit hanya <b>.env.example</b>, dan pasang .gitignore sejak commit pertama.</p></div>
+      <div class="risk"><span class="code">A07 · Auth Failures</span><h4>Amankan proses login</h4><p>Rate limiting percobaan login, sesi/token dengan masa berlaku, dan logout yang benar. Sederhana, tapi sering ditanya juri berlatar teknis.</p></div>
+      <div class="risk"><span class="code">Akses Juri</span><h4>Akun uji coba khusus &amp; terisolasi</h4><p>TOR mewajibkan kredensial juri jika ada login. Buat <b>akun demo terpisah berisi data dummy</b> (satu akun anggota + satu akun pengurus), bukan akun berisi data pribadi asli.</p></div>
+    </div>
+
+    <div class="pdp-note"><b>Catatan data pribadi (UU PDP):</b> data anggota koperasi — apalagi usia, transaksi, dan identitas — tergolong data pribadi. Menyebut secara eksplisit di pitch bahwa desain kalian sadar-privasi (minimalisasi data, enkripsi, akses berjenjang) menunjukkan kematangan yang jarang dimiliki tim hackathon lain.</div>
+  </div>
+</section>
+
+<!-- ================= G. PENILAIAN ================= -->
+<section class="section" id="penilaian">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">G.</span><h2>Strategi per Kriteria Penilaian</h2></div>
+    <p class="sec-intro">Bobot resmi dari TOR, plus cara paling efisien "mengunci" tiap kriteria. Perhatikan: dua kriteria teratas (45%) dimenangkan di <strong>framing masalah dan cerita</strong>, bukan di banyaknya fitur.</p>
+
+    <div class="crit">
+      <div class="crit-row">
+        <div class="crit-top"><h4>Relevansi dengan Permasalahan</h4><span class="w">25%</span></div>
+        <div class="bar"><i style="width:100%"></i></div>
+        <p>Buka pitch dengan <b>data, bukan fitur</b>: mis. proporsi anggota usia muda vs total (dari dataset TOR), atau persentase anggota yang tidak pernah hadir RAT. Satu kalimat masalah yang tajam bernilai lebih dari lima slide fitur.</p>
+      </div>
+      <div class="crit-row">
+        <div class="crit-top"><h4>Inovasi dan Kreativitas</h4><span class="w">20%</span></div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <p>Tunjukkan pembeda konkret vs aplikasi koperasi eksisting (juri pasti tahu yang sudah ada). Diferensiasi seperti skor keterlibatan + loop re-aktivasi adalah <em>novelty</em> yang bisa dipertahankan saat tanya-jawab. Hindari klaim "pertama di Indonesia" tanpa bukti.</p>
+      </div>
+      <div class="crit-row">
+        <div class="crit-top"><h4>Dampak dan Manfaat</h4><span class="w">20%</span></div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <p>Definisikan 3 metrik terukur dan tampilkan di slide dampak: <b>anggota aktif bulanan</b>, <b>tingkat partisipasi e-RAT</b>, <b>frekuensi transaksi per anggota</b>. Ini selaras persis dengan "Dampak yang Diharapkan" di TOR Tema 3.</p>
+      </div>
+      <div class="crit-row">
+        <div class="crit-top"><h4>Kemudahan Implementasi</h4><span class="w">15%</span></div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <p>Ceritakan jalur adopsi realistis: pilot di 1–2 koperasi percontohan, onboarding pengurus &lt; 1 hari, biaya infrastruktur rendah, dan kesiapan integrasi SIMKOPDES.</p>
+      </div>
+      <div class="crit-row">
+        <div class="crit-top"><h4>Kualitas Teknologi dan Solusi</h4><span class="w">15%</span></div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <p><b>Demo stabil &gt; fitur banyak.</b> Kunci alur demo (happy path), latih dua kali, dan siapkan video cadangan. README dengan arsitektur yang jelas ikut dinilai di sini.</p>
+      </div>
+      <div class="crit-row">
+        <div class="crit-top"><h4>Presentasi dan Pitch</h4><span class="w">5%</span></div>
+        <div class="bar"><i style="width:20%"></i></div>
+        <p>Bobot kecil, tapi pitch yang berantakan merusak persepsi semua kriteria lain. Ikuti struktur deck yang diwajibkan TOR (lihat bagian I).</p>
+      </div>
+    </div>
+    <p class="crit-foot">Catatan kecil: narasi TOR menyebut "8 metrik" namun tabel resminya merinci 6 kriteria dengan total 100%. Jika ragu, konfirmasikan ke panitia saat technical meeting.</p>
+  </div>
+</section>
+
+<!-- ================= H. ATURAN ================= -->
+<section class="section" id="aturan">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">H.</span><h2>Aturan Main yang Sering Bikin Tim Gugur</h2></div>
+    <p class="sec-intro">Bagian J TOR (Aturan Penggunaan AI/IP) dan beberapa klausul mekanisme punya konsekuensi berat — sampai diskualifikasi dan penarikan hadiah. Ini rangkumannya:</p>
+
+    <div class="rules-band">
+      <h3>Aturan Penggunaan AI Generatif</h3>
+      <p class="sub">Kompetisi menjunjung orisinalitas gagasan. AI berperan sebagai alat bantu teknis — bukan sumber ide inti.</p>
+      <div class="ok-grid">
+        <div class="ok-col yes">
+          <h4>Diperbolehkan</h4>
+          <ul>
+            <li>Bantuan penulisan &amp; perbaikan kode (coding assistance, debugging)</li>
+            <li>Riset pendukung, pencarian referensi, perapian tata bahasa</li>
+            <li>Aset pelengkap: ilustrasi, prototipe visual, dokumentasi teknis</li>
+          </ul>
+        </div>
+        <div class="ok-col no">
+          <h4>Tidak diperbolehkan</h4>
+          <ul>
+            <li>Menghasilkan gagasan, konsep, atau tema utama solusi langsung dari AI</li>
+            <li>Menyalin keluaran AI sebagai substansi inti karya tanpa pengembangan sendiri</li>
+            <li>Menggantikan proses ideasi, analisis masalah, dan pengambilan keputusan tim</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-cards">
+      <div class="rule-card">
+        <h4>Kewajiban Disclosure AI <span class="tag">Wajib</span></h4>
+        <p>Cantumkan perangkat AI yang dipakai + bagian mana yang dibantu, di README dan/atau deck. Keterbukaan <b>tidak mengurangi nilai</b>; menyembunyikannya justru bisa berujung diskualifikasi.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Live Defense Orisinalitas <span class="tag">Siapkan</span></h4>
+        <p>Juri berhak menguji kontribusi pemikiran tim lewat tanya-jawab. Pastikan <b>setiap anggota</b> bisa menjelaskan alasan di balik keputusan desain dan arsitektur — tanpa membuka catatan.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Pengalihan HAKI ke Kemenkop <span class="tag">Consent Form</span></h4>
+        <p>Jika lolos 10 besar, HAKI karya dialihkan ke Kemenkop RI (ditandatangani ketua tim). Sepakati implikasinya di internal tim <b>sebelum</b> tanda tangan — jangan jadi drama belakangan.</p>
+      </div>
+      <div class="rule-card">
+        <h4>Tanggung Jawab IP Pihak Ketiga <span class="tag">Cek Lisensi</span></h4>
+        <p>Tim bertanggung jawab penuh atas pelanggaran kekayaan intelektual — termasuk yang timbul dari keluaran AI. Pakai library/aset berlisensi jelas (MIT, Apache, CC) dan catat sumbernya.</p>
+      </div>
+    </div>
+
+    <div class="tpl">
+      <span class="t-label">Contoh kerangka kalimat disclosure — sesuaikan dengan fakta penggunaan tim kalian</span>
+      <p>"Tim menggunakan AI generatif (sebutkan perangkatnya, mis. Claude/ChatGPT) sebagai alat bantu untuk penulisan dan debugging kode, riset pendukung, serta pembuatan aset dokumentasi. Seluruh gagasan inti, analisis masalah, keputusan desain, dan arsitektur solusi dirumuskan dan dikembangkan oleh anggota tim."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= I. DELIVERABLES ================= -->
+<section class="section" id="deliverables">
+  <div class="wrap rv">
+    <div class="sec-head"><span class="sec-mark">I.</span><h2>Checklist Deliverables &amp; Kerangka Pitch Deck</h2></div>
+    <p class="sec-intro">Semua dikumpulkan lewat portal SIMKOPDES <strong>sebelum sprint berakhir</strong>. Gunakan checklist ini sebagai gerbang akhir sebelum submit:</p>
+
+    <div class="del-grid">
+      <div class="check-card">
+        <h3>Checklist pengumpulan (TOR bagian F)</h3>
+        <ul class="chk">
+          <li><input type="checkbox" id="c1"><label for="c1"><b>Repositori publik</b> (GitHub/GitLab/Bitbucket) berisi seluruh source code MVP</label></li>
+          <li><input type="checkbox" id="c2"><label for="c2"><b>README.md</b> di direktori utama: installation guide + penjelasan arsitektur + <b>disclosure AI</b></label></li>
+          <li><input type="checkbox" id="c3"><label for="c3">Tidak ada secret/API key ter-commit (cek riwayat commit, bukan cuma file terakhir)</label></li>
+          <li><input type="checkbox" id="c4"><label for="c4"><b>Pitch deck PDF</b>, maksimal 10–12 slide sesuai struktur TOR</label></li>
+          <li><input type="checkbox" id="c5"><label for="c5"><b>URL demo aktif</b> (web/PWA) atau tautan unduh APK — dicek dari jaringan berbeda</label></li>
+          <li><input type="checkbox" id="c6"><label for="c6"><b>Kredensial akun uji juri</b> (username + password demo) di kolom deskripsi pengumpulan</label></li>
+          <li><input type="checkbox" id="c7"><label for="c7">Video demo ≤ 3 menit — opsional, tapi jadi penyelamat kalau demo live bermasalah (YouTube unlisted / Google Drive)</label></li>
+          <li><input type="checkbox" id="c8"><label for="c8">Submit final di portal SIMKOPDES — target <b>minimal 1 jam sebelum deadline</b></label></li>
+        </ul>
+      </div>
+      <div class="check-card">
+        <h3>Kerangka 11 slide (sesuai konten wajib TOR)</h3>
+        <ol class="deck">
+          <li><b>Judul &amp; identitas tim</b> — nama solusi + tagline satu kalimat</li>
+          <li><b>Masalah + data</b> — bocornya partisipasi, dibuktikan angka</li>
+          <li><b>Insight</b> — funnel keterlibatan &amp; di mana titik kritisnya</li>
+          <li><b>Solusi ringkas</b> — satu kalimat + diagram alur pengguna</li>
+          <li><b>Demo fitur inti</b> — transparansi, e-RAT, gamifikasi</li>
+          <li><b>Diferensiasi</b> — pembeda utama vs solusi eksisting</li>
+          <li><b>Arsitektur &amp; keamanan</b> — stack + poin OWASP/PDP</li>
+          <li><b>Business &amp; impact model</b> — keberlanjutan &amp; skalabilitas</li>
+          <li><b>Metrik dampak</b> — 3 indikator terukur</li>
+          <li><b>Roadmap implementasi</b> — pilot → integrasi SIMKOPDES → skala nasional</li>
+          <li><b>Team profile + disclosure AI</b> — peran anggota &amp; keterbukaan</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="deadline-warn">
+      <span style="font-size:20px">⏱</span>
+      <p><b>Peraturan tegas TOR:</b> pengumpulan yang melewati batas waktu — <b>meski terlambat 1 detik</b> — otomatis menggugurkan hak tim maju ke Pitching Day. Tunjuk satu orang sebagai "penjaga deadline" dengan alarm di H-2 jam, H-1 jam, dan H-30 menit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <p class="f-title">Catatan penggunaan dokumen ini</p>
+    <p>Dokumen ini disusun dengan bantuan AI sebagai <em>riset pendukung dan bahan analisis</em> — kategori penggunaan yang diperbolehkan TOR. Gagasan final, konsep inti, dan seluruh keputusan tetap harus lahir dari diskusi tim kalian sendiri, dan penggunaan AI wajib dicantumkan dalam disclosure karya. Tantang setiap rekomendasi di sini, buang yang tidak cocok, dan bangun versi kalian sendiri.</p>
+    <p class="src">Sumber acuan: TOR Hackathon Digital Cooperatives Expo 2026 — Kemenkop RI · Timeline tentatif, cek info resmi panitia · Semangat, semoga tembus 3 besar! 🏆</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal — dihormati prefers-reduced-motion via CSS
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:0.08});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

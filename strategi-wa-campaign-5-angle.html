@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5 Angle WA Campaign · Tema 3 Hackathon Kemenkop 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-900: #065f46;
+    --green-700: #059669;
+    --green-500: #10b981;
+    --green-300: #6ee7b7;
+    --amber-500: #f59e0b;
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-500: #64748b;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --red-600: #dc2626;
+    --white: #ffffff;
+    --disp: 'Plus Jakarta Sans', system-ui;
+    --body: 'Public Sans', system-ui;
+    --mono: 'Courier Prime', monospace;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  
+  body {
+    font-family: var(--body);
+    background: var(--slate-100);
+    color: var(--slate-900);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 100%);
+    color: var(--white);
+    padding: 64px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 300px;
+    height: 300px;
+    background: rgba(255,255,255, 0.05);
+    border-radius: 50%;
+  }
+  
+  .hero .inner { position: relative; z-index: 1; }
+  .hero h1 {
+    font-family: var(--disp);
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  
+  .hero h1 em { font-style: normal; color: var(--green-300); }
+  
+  .hero .lede {
+    font-size: 17px;
+    max-width: 700px;
+    color: rgba(255,255,255, 0.9);
+    margin-bottom: 20px;
+  }
+  
+  .hero .tag {
+    display: inline-block;
+    background: rgba(255,255,255, 0.15);
+    border: 1px solid rgba(255,255,255, 0.25);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green-300);
+  }
+  
+  /* SECTION */
+  .section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--slate-200);
+  }
+  
+  .section.alt { background: var(--white); }
+  
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .sec-num {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--green-500);
+  }
+  
+  .sec-head h2 {
+    font-family: var(--disp);
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--slate-900);
+  }
+  
+  .sec-intro {
+    font-size: 15.5px;
+    color: var(--slate-700);
+    max-width: 760px;
+    margin-top: 8px;
+    margin-bottom: 28px;
+    line-height: 1.75;
+  }
+  
+  .sec-intro strong { color: var(--slate-900); font-weight: 600; }
+  
+  /* ANGLE CARDS */
+  .angle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-top: 28px; }
+  
+  .angle-card {
+    background: var(--white);
+    border: 2px solid var(--slate-200);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .angle-card:hover {
+    border-color: var(--green-500);
+    box-shadow: 0 12px 24px rgba(16, 185, 129, 0.1);
+  }
+  
+  .angle-card.featured {
+    border-color: var(--amber-500);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.02), rgba(245, 158, 11, 0.03));
+  }
+  
+  .angle-card.featured::before {
+    content: '⭐ RECOMMENDED';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--amber-500);
+    background: rgba(245, 158, 11, 0.1);
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+  
+  .angle-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green-500);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    display: block;
+  }
+  
+  .angle-card h3 {
+    font-family: var(--disp);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--slate-900);
+  }
+  
+  .angle-card p {
+    font-size: 14px;
+    color: var(--slate-700);
+    margin-bottom: 14px;
+  }
+  
+  .angle-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--slate-200);
+  }
+  
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+  }
+  
+  .meta-row .label { font-weight: 600; color: var(--slate-700); }
+  .meta-row .value { color: var(--slate-500); text-align: right; }
+  
+  .score-bar {
+    height: 6px;
+    background: var(--slate-200);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 3px;
+  }
+  
+  .score-bar i {
+    display: block;
+    height: 100%;
+    background: var(--green-500);
+    border-radius: 3px;
+  }
+  
+  /* COMPARISON TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--slate-200);
+    margin-top: 28px;
+  }
+  
+  .comp-table th,
+  .comp-table td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--slate-200);
+    font-size: 14px;
+  }
+  
+  .comp-table th {
+    background: var(--slate-100);
+    font-weight: 700;
+    color: var(--slate-900);
+    font-family: var(--disp);
+  }
+  
+  .comp-table td:first-child {
+    font-weight: 600;
+    color: var(--slate-900);
+    white-space: nowrap;
+  }
+  
+  .comp-table tr:last-child td { border-bottom: none; }
+  
+  .check { color: var(--green-700); font-weight: 700; }
+  .half { color: var(--amber-500); }
+  .cross { color: var(--red-600); }
+  
+  /* CONVERSATION FLOW */
+  .flow-box {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+  }
+  
+  .flow-title {
+    font-family: var(--disp);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--slate-900);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .flow-title .icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: var(--green-500);
+    color: var(--white);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+  }
+  
+  .msgs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .msg {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    max-width: 70%;
+  }
+  
+  .msg.user {
+    background: var(--green-500);
+    color: var(--white);
+    margin-left: auto;
+    text-align: right;
+  }
+  
+  .msg.bot {
+    background: var(--slate-200);
+    color: var(--slate-900);
+    margin-right: auto;
+  }
+  
+  /* METRICS BOX */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
+  }
+  
+  .metric {
+    background: var(--slate-100);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  
+  .metric .num {
+    font-family: var(--disp);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--green-700);
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .metric .label {
+    font-size: 12.5px;
+    color: var(--slate-700);
+    font-weight: 600;
+  }
+  
+  /* RISK BOX */
+  .risk-box {
+    background: rgba(220, 38, 38, 0.04);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    font-size: 13.5px;
+    color: var(--slate-900);
+  }
+  
+  .risk-box .label {
+    font-weight: 700;
+    color: var(--red-600);
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  
+  /* ROADMAP */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+  
+  .phase {
+    background: var(--white);
+    border: 1px solid var(--slate-200);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .phase .title {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--slate-900);
+    margin-bottom: 8px;
+  }
+  
+  .phase .time {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--slate-500);
+    margin-bottom: 12px;
+  }
+  
+  .phase .desc {
+    font-size: 13.5px;
+    color: var(--slate-700);
+    line-height: 1.6;
+  }
+  
+  .phase.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(110, 231, 183, 0.05));
+    border-color: var(--green-500);
+  }
+  
+  /* FOOTER */
+  footer {
+    background: var(--slate-900);
+    color: var(--slate-300);
+    padding: 40px 0;
+    margin-top: 60px;
+  }
+  
+  footer h3 {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  footer p {
+    font-size: 13.5px;
+    margin-bottom: 12px;
+  }
+  
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .angle-grid { grid-template-columns: 1fr; }
+    .comp-table { font-size: 12px; }
+    .comp-table th, .comp-table td { padding: 10px 12px; }
+    .roadmap { grid-template-columns: 1fr; }
+    .msg { max-width: 85%; }
+  }
+  
+  /* REVEAL */
+  .rv {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: reveal 0.6s ease forwards;
+  }
+  
+  @keyframes reveal {
+    to { opacity: 1; transform: none; }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; transform: none; animation: none; }
+  }
+  
+  :focus-visible { outline: 3px solid var(--green-500); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="inner">
+      <h1>Lima Angle Kampanye WhatsApp<br><em>yang Benar-Benar Punya Pembeda</em></h1>
+      <p class="lede">Dari "daftar di sini" yang generik ke strategi akuisisi yang punya insight mendalam — lengkap contoh copy, journey map, dan metrik untuk sprint kalian.</p>
+      <span class="tag">Tema 3 Hackathon Kemenkop · Strategi Engagement</span>
+    </div>
+  </div>
+</header>
+
+<!-- SECTION 1: PROBLEM STATEMENT -->
+<section class="section alt">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">①</span>
+      <div>
+        <h2>Kenapa WA Campaign Kalian Harus Beda?</h2>
+      </div>
+    </div>
+    <p class="sec-intro">
+      Bobot <strong>Relevansi 25%</strong> di TOR dimenangkan dengan <strong>framing masalah yang tajam</strong>, bukan jumlah fitur.
+      Juri pasti akan tanya: <em>"Bagaimana kalian akuisisi user untuk demo?"</em> Kalau jawabnya "kirim campaign generic", itu signal bahwa tim tidak paham audience.
+    </p>
+    <p class="sec-intro">
+      Challenge Question #1 TOR: <strong>"Mengapa masyarakat belum tertarik jadi anggota koperasi?"</strong> 
+      Jawaban kuat = data dari campaign WA kalian sendiri. Saat live defense bisa bilang: <em>"60% target kami reply campaign karena [insight spesifik]"</em> — itu jauh lebih kredibel daripada asumsi di deck.
+    </p>
+  </div>
+</section>
+
+<!-- SECTION 2: 5 ANGLE -->
+<section class="section">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">②</span>
+      <div>
+        <h2>Lima Angle Kampanye (Pilih 1–2)</h2>
+      </div>
+    </div>
+    <p class="sec-intro">
+      Setiap angle punya <strong>diferensiator, target audience, dan metrik sukses</strong> yang berbeda. Jangan coba semua sekaligus — pilih satu (atau dua maksimal) yang align dengan visi aplikasi kalian.
+    </p>
+
+    <div class="angle-grid">
+      <!-- ANGLE 1 -->
+      <div class="angle-card featured">
+        <span class="angle-num">Angle 1</span>
+        <h3>Transparansi Dulu, Baru Daftar</h3>
+        <p>WA campaign yang <strong>langsung transparankan benefit &amp; data koperasi</strong> — SHU, rata-rata pinjaman, member count — tanpa hard-sell. Pembeda: data real dari SIMKOPDES ditampilkan di campaign.</p>
+        
+        <div class="angle-meta">
+          <div class="meta-row">
+            <span class="label">Target</span>
+            <span class="value">Masyarakat yang skeptis / pernah burned</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Key Insight</span>
+            <span class="value">Transparansi = trust builder utama</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Primary Metric</span>
+            <span class="value">Click-through ke dashboard SHU</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Alignment ke App</span>
+            <span class="value">Dashboard transparansi jadi hero</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Effort to Build</span>
+            <span class="value">Medium</span>
+          </div>
+          <div class="score-bar"><i style="width: 75%;"></i></div>
+        </div>
+      </div>
+
+      <!-- ANGLE 2 -->
+      <div class="angle-card">
+        <span class="angle-num">Angle 2</span>
+        <h3>Gamifikasi Pre-Join</h3>
+        <p>Misi &amp; poin <strong>mulai di WA sebelum unduh app</strong>. Kirim misi harian (tebak pertanyaan, share ke teman, screenshot undangan), poin bisa ditukar voucher atau fast-track registrasi.</p>
+        
+        <div class="angle-meta">
+          <div class="meta-row">
+            <span class="label">Target</span>
+            <span class="value">Gen-Z yang suka gamifikasi</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Key Insight</span>
+            <span class="value">Reward membuat commit lebih tinggi</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Primary Metric</span>
+            <span class="value">Completion rate misi di WA</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Alignment ke App</span>
+            <span class="value">Validasi mekanik gamifikasi app</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Effort to Build</span>
+            <span class="value">High (butuh automation bot)</span>
+          </div>
+          <div class="score-bar"><i style="width: 55%;"></i></div>
+        </div>
+      </div>
+
+      <!-- ANGLE 3 -->
+      <div class="angle-card">
+        <span class="angle-num">Angle 3</span>
+        <h3>Data-Driven Segmentation</h3>
+        <p>Segmentasi target berbeda per usia/profesi. Gen-Z dapat pesan tentang "komunitasnya", Gen-X tentang "return investasi", petani tentang "cicilan mudah". Campaign copy yang totally different per segment.</p>
+        
+        <div class="angle-meta">
+          <div class="meta-row">
+            <span class="label">Target</span>
+            <span class="value">Semua usia (tapi pesan berbeda)</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Key Insight</span>
+            <span class="value">One size doesn't fit all messaging</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Primary Metric</span>
+            <span class="value">Reply rate per segment</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Alignment ke App</span>
+            <span class="value">Onboarding &amp; UX tuning per age</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Effort to Build</span>
+            <span class="value">High (perlu audience research)</span>
+          </div>
+          <div class="score-bar"><i style="width: 70%;"></i></div>
+        </div>
+      </div>
+
+      <!-- ANGLE 4 -->
+      <div class="angle-card">
+        <span class="angle-num">Angle 4</span>
+        <h3>Ambassador (Real Anggota)</h3>
+        <p>Jangan bot marketing — tapi anggota koperasi nyata yg excited share ke group keluarga mereka. Pakai screenshot asli, voice note, cerita mereka. Campaign ini "influence organik from within".</p>
+        
+        <div class="angle-meta">
+          <div class="meta-row">
+            <span class="label">Target</span>
+            <span class="value">Network anggota yang sudah aktif</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Key Insight</span>
+            <span class="value">Trust peer > trust brand</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Primary Metric</span>
+            <span class="value">Referral rate dari ambassador</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Alignment ke App</span>
+            <span class="value">Loyalty system memberikan insentif ambassador</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Effort to Build</span>
+            <span class="value">Low-Medium (koordinasi manual)</span>
+          </div>
+          <div class="score-bar"><i style="width: 80%;"></i></div>
+        </div>
+      </div>
+
+      <!-- ANGLE 5 -->
+      <div class="angle-card">
+        <span class="angle-num">Angle 5</span>
+        <h3>Solve Pain Point Konkret</h3>
+        <p>Bukan ajakan umum, tapi <strong>tanggapi masalah spesifik</strong> yang juri atau anggota sudah pernah keluh. Mis: "Pengin cicil motor tapi bunga bank 5 digit? Koperasi kami 3 digit" — targeted offer yang terukur.</p>
+        
+        <div class="angle-meta">
+          <div class="meta-row">
+            <span class="label">Target</span>
+            <span class="value">Audience dengan kebutuhan urgent</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Key Insight</span>
+            <span class="value">Problem-solution fit yang jelas</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Primary Metric</span>
+            <span class="value">Conversion ke aplikasi loan</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Alignment ke App</span>
+            <span class="value">Flow pinjaman harus super smooth</span>
+          </div>
+          <div class="meta-row">
+            <span class="label">Effort to Build</span>
+            <span class="value">Medium (riset pain point dulu)</span>
+          </div>
+          <div class="score-bar"><i style="width: 85%;"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: COMPARISON -->
+<section class="section alt">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">③</span>
+      <div>
+        <h2>Perbandingan Cepat (Pilih Angle Mana?)</h2>
+      </div>
+    </div>
+
+    <table class="comp-table">
+      <tr>
+        <th>Kriteria</th>
+        <th>Angle 1<br><em>Transparansi</em></th>
+        <th>Angle 2<br><em>Gamifikasi</em></th>
+        <th>Angle 3<br><em>Segmentasi</em></th>
+        <th>Angle 4<br><em>Ambassador</em></th>
+        <th>Angle 5<br><em>Pain Point</em></th>
+      </tr>
+      <tr>
+        <td>Alignment Relevansi TOR</td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+      </tr>
+      <tr>
+        <td>Cepat dikerjakan sprint</td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="half">◐</span></td>
+        <td><span class="half">◐</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓</span></td>
+      </tr>
+      <tr>
+        <td>Data real dari campaign</td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="half">◐</span></td>
+        <td><span class="check">✓✓</span></td>
+      </tr>
+      <tr>
+        <td>Bisa cerita di live defense</td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+      </tr>
+      <tr>
+        <td>Tie ke app design</td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓✓</span></td>
+        <td><span class="check">✓✓</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓✓</span></td>
+      </tr>
+      <tr>
+        <td>Risk jika fail</td>
+        <td><span class="check">Low</span></td>
+        <td><span class="half">Medium</span></td>
+        <td><span class="half">Medium</span></td>
+        <td><span class="check">Low</span></td>
+        <td><span class="half">Medium</span></td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 4: CONTOH COPY -->
+<section class="section">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">④</span>
+      <div>
+        <h2>Contoh Copy: Side-by-Side</h2>
+      </div>
+    </div>
+    <p class="sec-intro">Bukan template — ini contoh konkret bagaimana angle mengubah tone &amp; messaging. Sesuaikan dengan konteks koperasi target kalian.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 28px;">
+      <!-- GENERIC -->
+      <div>
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 12px; color: #dc2626;">❌ Copy Generic (Yang Dijauhi Juri)</h4>
+        <div class="flow-box">
+          <div class="msgs">
+            <div class="msg bot">Halo! Kami mengundang Anda untuk bergabung dengan aplikasi koperasi kami. Daftar sekarang dan nikmati berbagai keuntungan menarik! 📱</div>
+            <div class="msg bot">Pinjaman mudah, bunga rendah, dan keuntungan bersama. Jangan lewatkan kesempatan emas ini! Klik link di bawah.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANGLE 1 -->
+      <div>
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 12px; color: #059669;">✓ Angle 1: Transparansi</h4>
+        <div class="flow-box">
+          <div class="msgs">
+            <div class="msg bot">Bulan lalu SHU kami Rp 127M untuk 8.200 anggota. Jadi Anda dpt Rp 15rb/bulan hanya menabung. Lihat: [link dashboard real]</div>
+            <div class="msg user">Wow benaran? Dimana lihatnya?</div>
+            <div class="msg bot">Buka app — semua angka real-time di sini. Ga ada yang disembunyiin. Mau coba daftar ≤5 menit?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANGLE 2 -->
+      <div>
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 12px; color: #059669;">✓ Angle 2: Gamifikasi</h4>
+        <div class="flow-box">
+          <div class="msgs">
+            <div class="msg bot">Misi hari ini: tebak — SHU koperasi bulan lalu berapa? A) Rp 100jt B) Rp 127jt C) Rp 80jt. Jawab benar +50 poin! 🎯</div>
+            <div class="msg user">B!</div>
+            <div class="msg bot">Benar! +50 poin. Sekarang 150 poin mu. Tukar jadi voucher belanja atau fast-track registrasi: [link]</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANGLE 3 -->
+      <div>
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 12px; color: #059669;">✓ Angle 3: Segmentasi (Gen-Z)</h4>
+        <div class="flow-box">
+          <div class="msgs">
+            <div class="msg bot">Skuy join komunitas Gen-Z yang ngatur duit bareng (600+ member udah). Voting keputusan, transparansi penuh, dapet voting badge. Cek: [link]</div>
+            <div class="msg user">Kaya apa format voting nya?</div>
+            <div class="msg bot">RUU online, live count, real-time hasil. Serius, bukan mainan. 48 jam voting periode, siapa mau ikut ambil keputusan bersama. Coba lihat di app.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANGLE 5 -->
+      <div>
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 12px; color: #059669;">✓ Angle 5: Pain Point (Cicilan Motor)</h4>
+        <div class="flow-box">
+          <div class="msgs">
+            <div class="msg bot">Pengin cicil motor bulan depan? Bank: 5% per tahun. Kami: 2.5%. Prosesnya 2 jam (bukan 2 hari). Kopi dulu di sini: [link]</div>
+            <div class="msg user">Emang sah? Ga ada biaya tersembunyi?</div>
+            <div class="msg bot">100% transparan di app. Lihat kalkulasi bunga real-time sebelum approve. Semua anggota kita puas (4.8 star di app).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: METRICS & TRACKING -->
+<section class="section alt">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">⑤</span>
+      <div>
+        <h2>Metrik Sukses per Angle</h2>
+      </div>
+    </div>
+    <p class="sec-intro">
+      Jangan ukur campaign cuma dari "berapa daftar". Ukur <strong>perilaku spesifik per angle</strong> — ini data yang bisa kalian cerita saat live defense sebagai validasi desain aplikasi.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px;">
+      <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 10px;">Angle 1 · Transparansi</h4>
+        <div style="font-size: 13.5px; color: var(--slate-700); line-height: 1.7;">
+          <strong>Primary:</strong> Click-through ke dashboard SHU<br>
+          <strong>Secondary:</strong> Screenshot capture rate<br>
+          <strong>Tertiary:</strong> Time spent di dashboard sebelum register
+        </div>
+      </div>
+
+      <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 10px;">Angle 2 · Gamifikasi</h4>
+        <div style="font-size: 13.5px; color: var(--slate-700); line-height: 1.7;">
+          <strong>Primary:</strong> Misi completion rate (%)<br>
+          <strong>Secondary:</strong> Poin yang diredeeem jadi daftar<br>
+          <strong>Tertiary:</strong> Retention after first misi
+        </div>
+      </div>
+
+      <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 10px;">Angle 3 · Segmentasi</h4>
+        <div style="font-size: 13.5px; color: var(--slate-700); line-height: 1.7;">
+          <strong>Primary:</strong> Reply rate per segment (%)<br>
+          <strong>Secondary:</strong> Segment mana yang highest intent<br>
+          <strong>Tertiary:</strong> Message fatigue point
+        </div>
+      </div>
+
+      <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 10px;">Angle 4 · Ambassador</h4>
+        <div style="font-size: 13.5px; color: var(--slate-700); line-height: 1.7;">
+          <strong>Primary:</strong> Referral dari ambassador<br>
+          <strong>Secondary:</strong> Quality of referral (retention)<br>
+          <strong>Tertiary:</strong> Ambassador engagement di app
+        </div>
+      </div>
+
+      <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+        <h4 style="font-family: var(--disp); font-weight: 700; margin-bottom: 10px;">Angle 5 · Pain Point</h4>
+        <div style="font-size: 13.5px; color: var(--slate-700); line-height: 1.7;">
+          <strong>Primary:</strong> Conv dari campaign ke loan apply<br>
+          <strong>Secondary:</strong> Loan approval rate<br>
+          <strong>Tertiary:</strong> Customer satisfaction
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: TIMELINE & ROADMAP -->
+<section class="section">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">⑥</span>
+      <div>
+        <h2>Roadmap Sprint 24–36 Jam</h2>
+      </div>
+    </div>
+    <p class="sec-intro">Timeline bagaimana menjalankan campaign WA <strong>sambil tetap fokus development MVP</strong> — bukan saling mengganggu.</p>
+
+    <div class="roadmap">
+      <div class="phase active">
+        <div class="title">Phase 1: Setup &amp; Seed</div>
+        <div class="time">Jam 0–4</div>
+        <div class="desc">
+          Pilih angle. Siapkan copy &amp; aset campaign. Buat spreadsheet target audience. Seed data di app sudah jalan (transparansi sudah muncul di dashboard).
+        </div>
+      </div>
+
+      <div class="phase active">
+        <div class="title">Phase 2: Live Campaign</div>
+        <div class="time">Jam 5–20</div>
+        <div class="desc">
+          Mulai broadcast/send WA campaign ke target audience. Track metrics real-time. Team A fokus dev, Team B monitor campaign + collect data.
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="title">Phase 3: Iterate &amp; Polish</div>
+        <div class="time">Jam 21–30</div>
+        <div class="desc">
+          Lihat response rate. Fine-tune app UX berdasarkan feedback campaign. Finalisasi deck pitch dengan data dari campaign.
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="title">Phase 4: Demo &amp; Defense</div>
+        <div class="time">Jam 31–36</div>
+        <div class="desc">
+          Latih live demo. Siapkan narasi: "60% dari audience kami engage karena [insight campaign]". Video backup ≤3 menit.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7: RISK & MITIGATION -->
+<section class="section alt">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">⑦</span>
+      <div>
+        <h2>Risk &amp; Mitigation</h2>
+      </div>
+    </div>
+    <p class="sec-intro">Juri akan tanya: "Apa yang bisa salah di campaign ini?" Siapkan jawaban dulu.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 28px;">
+      <div class="risk-box">
+        <span class="label">🚨 Risk 1: Low Response Rate</span>
+        <strong>Masalah:</strong> Target audience tidak reply. Khawatir data validation tidak cukup.
+        <br><strong>Mitigasi:</strong> Pre-test copy ke 50 orang dulu. Adjust berdasarkan feedback. Jangan launch ke 1000 orang langsung.
+      </div>
+
+      <div class="risk-box">
+        <span class="label">🚨 Risk 2: App Demo Jadi Slow</span>
+        <strong>Masalah:</strong> Campaign generate trafik besar → app crash/timeout saat demo.
+        <br><strong>Mitigasi:</strong> Prepare demo environment terpisah (static data, bukan live campaign data). Video backup sudah terrekam.
+      </div>
+
+      <div class="risk-box">
+        <span class="label">🚨 Risk 3: Copy Dianggap Spam/Misleading</span>
+        <strong>Masalah:</strong> Audience complain campaign terlalu aggressive atau janji tidak jelas.
+        <br><strong>Mitigasi:</strong> Disclose semua asumsi di deck. Misalnya: "Campaign ini berbasis simulasi — SHU belum real karena app baru."
+      </div>
+
+      <div class="risk-box">
+        <span class="label">🚨 Risk 4: Competitor Copy (Angle Sama)</span>
+        <strong>Masalah:</strong> Tim lain juga pakai strategi transparansi atau gamifikasi yang mirip.
+        <br><strong>Mitigasi:</strong> Fokus ke execution &amp; detail. Contoh: "Yang beda kami adalah data real dari SIMKOPDES + live dashboard." Concrete beats generic.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8: PICK ANGLE -->
+<section class="section">
+  <div class="wrap rv">
+    <div class="sec-head">
+      <span class="sec-num">⑧</span>
+      <div>
+        <h2>Quick Decision Guide: Pilih Angle Mana?</h2>
+      </div>
+    </div>
+
+    <div style="background: var(--white); border: 2px solid var(--green-500); border-radius: 12px; padding: 24px; margin-top: 24px;">
+      <p style="font-size: 15px; margin-bottom: 16px;"><strong>Jawab pertanyaan ini — angle mana hasilnya:</strong></p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px; line-height: 1.8;">
+        <div>
+          <p><strong style="color: var(--green-700);">→ Jika tim punya akses data SIMKOPDES real:</strong><br>Pilih <strong>Angle 1 (Transparansi)</strong> — data real adalah pembeda utama.</p>
+
+          <p style="margin-top: 12px;"><strong style="color: var(--green-700);">→ Jika tim punya developer yang mahir automation:</strong><br>Pilih <strong>Angle 2 (Gamifikasi)</strong> — butuh bot WA yang reliable.</p>
+
+          <p style="margin-top: 12px;"><strong style="color: var(--green-700);">→ Jika tim bisa akses anggota koperasi asli:</strong><br>Pilih <strong>Angle 4 (Ambassador)</strong> — organic, cepat, credible.</p>
+        </div>
+
+        <div>
+          <p><strong style="color: var(--green-700);">→ Jika tim punya time riset audience mendalam:</strong><br>Pilih <strong>Angle 3 (Segmentasi)</strong> — butuh insight yang dalam.</p>
+
+          <p style="margin-top: 12px;"><strong style="color: var(--green-700);">→ Jika tim punya use-case bisnis konkret (cicilan, dll):</strong><br>Pilih <strong>Angle 5 (Pain Point)</strong> — narasi paling kuat untuk juri.</p>
+
+          <p style="margin-top: 12px;"><strong style="color: var(--green-700);">→ Jika masih ragu:</strong><br>Pilih <strong>Angle 1</strong> — paling aman, bisa dikerjakan cepat, data paling mudah explain ke juri.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <h3>Catatan Akhir</h3>
+    <p>
+      Campaign WA adalah <strong>validation tool</strong> — bukan just marketing. Data real dari campaign adalah cerita yang jauh lebih kuat daripada asumsi di deck. 
+      Juri ingin lihat: <em>"Kalian udah coba, udah dapat feedback, dan desain app berubah karena itu."</em>
+    </p>
+    <p>
+      Jadi ketika lihat 6 orang reply dengan pertanyaan spesifik soal SHU, itu lebih berharga daripada 600 orang klik link generic. Kualitas feedback > Kuantitas klik.
+    </p>
+    <p>
+      <strong>Sukses di sprint! 🚀 Semoga tim kalian jadi yang 1 dari 10 yang lolos pitching day dengan cerita data yang benar-benar solid.</strong>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
