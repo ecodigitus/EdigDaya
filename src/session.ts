@@ -12,6 +12,7 @@ type Session = {
   history: ChatMessage[];
   hits: number[]; // timestamp (ms) pesan masuk, untuk rate limit
   lastSeen: number;
+  aiMode: boolean; // true = user sedang di mode "ngobrol dengan asisten AI"
 };
 
 const sessions = new Map<string, Session>();
@@ -19,10 +20,22 @@ const sessions = new Map<string, Session>();
 function get(jid: string): Session {
   let s = sessions.get(jid);
   if (!s) {
-    s = { history: [], hits: [], lastSeen: Date.now() };
+    s = { history: [], hits: [], lastSeen: Date.now(), aiMode: false };
     sessions.set(jid, s);
   }
   return s;
+}
+
+/** True jika user sedang dalam mode "ngobrol dengan asisten AI". */
+export function inAiMode(jid: string): boolean {
+  return get(jid).aiMode;
+}
+
+/** Aktif/nonaktifkan mode ngobrol AI untuk user. */
+export function setAiMode(jid: string, on: boolean): void {
+  const s = get(jid);
+  s.aiMode = on;
+  s.lastSeen = Date.now();
 }
 
 /** Ambil riwayat percakapan user (untuk dikirim sebagai konteks ke AI). */

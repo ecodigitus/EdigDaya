@@ -1,16 +1,18 @@
 import { startBot } from './whatsapp';
 import { logger } from './logger';
-import { config, aiEnabled } from './config';
+import { config, aiEnabled, activeModel, activeKeyEnv } from './config';
 import { cleanup } from './session';
 
 async function main(): Promise<void> {
   logger.info(
-    { aiEnabled, model: aiEnabled ? config.anthropic.model : 'disabled' },
+    { aiEnabled, provider: config.ai.provider, model: aiEnabled ? activeModel : 'disabled' },
     '🤖 Memulai WhatsApp CS Chatbot...',
   );
 
   if (!aiEnabled) {
-    logger.warn('ANTHROPIC_API_KEY kosong — bot jalan mode rule-based (menu) saja. Isi .env untuk aktifkan AI.');
+    logger.warn(
+      `${activeKeyEnv} kosong — bot jalan mode rule-based (menu) saja. Isi .env untuk aktifkan AI (${config.ai.provider}).`,
+    );
   }
 
   // Bersih-bersih sesi tidak aktif tiap 5 menit (mencegah memory bocor)

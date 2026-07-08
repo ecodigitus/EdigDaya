@@ -11,6 +11,7 @@
  */
 import { koperasi } from './business';
 import { rupiah } from './format';
+import { creditSimpanan } from './simpanan';
 import type { Member } from './members';
 
 type CampaignKind = 'nudge' | 'vote';
@@ -159,13 +160,15 @@ function handleNudgeReply(jid: string, t: string, c: Campaign, m: Member): strin
     c.responded.add(jid);
     pending.delete(jid);
     const before = m.skorKeterlibatan;
+    creditSimpanan(m, 'wajib', koperasi.simpanan.wajib); // beneran menambah saldo (bukan sekadar poin)
     m.poin += 50;
     m.skorKeterlibatan = Math.min(100, m.skorKeterlibatan + 7);
     return (
-      `✅ Siap, *${m.nama}*! Pembayaran simpanan wajib tercatat 🎉\n\n` +
+      `✅ Siap, *${m.nama}*! Pembayaran *simpanan wajib ${rupiah(koperasi.simpanan.wajib)}* tercatat 🎉\n\n` +
+      `💰 Total simpanan wajib kamu kini: *${rupiah(m.simpananWajib)}*\n` +
       `⭐ +50 poin  (total ${m.poin.toLocaleString('id-ID')})\n` +
       `📊 Skor keterlibatan: ${before} → *${m.skorKeterlibatan}*/100\n\n` +
-      `Makasih udah aktif! Ketik *poin* buat lihat progресmu. 🙌`
+      `Makasih udah aktif! Ketik *poin* buat lihat progresmu. 🙌`
     );
   }
   if (no.some((w) => t === w)) {

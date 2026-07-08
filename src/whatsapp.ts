@@ -5,13 +5,46 @@ import makeWASocket, {
   type WASocket,
   type proto,
 } from '@whiskeysockets/baileys';
+import { existsSync } from 'node:fs';
 import qrcode from 'qrcode-terminal';
 import { config } from './config';
 import { logger, waLogger, maskJid } from './logger';
-import { allowed } from './session';
+import { allowed, setAiMode } from './session';
+import { cancelActivation } from './activation';
+import { cancelPoForm, drainOutbox, handleAdminPo } from './preorder';
 import { route } from './router';
 import { getMember } from './members';
 import { startVoteFor, startNudgeFor } from './campaigns';
+import { drainNotifs } from './notifications';
+import { welcomeCaption } from './welcome';
+
+// Perintah yang memicu welcome card (logo + caption + pilihan).
+const WELCOME_TRIGGERS = new Set(['mulai', 'start', '/start', '/mulai']);
+
+// Socket aktif + penanda pump, agar push terjadwal bisa dikirim kapan saja.
+let activeSock: WASocket | null = null;
+let notifPumpStarted = false;
+
+/**
+ * Pump notifikasi proaktif: tiap beberapa detik, kuras antrean push terjadwal
+ * (notifications.ts) lalu kirim via socket aktif — jadi pesan bisa datang SENDIRI
+ * meski user tidak sedang chat. Dijalankan sekali (idempoten saat reconnect).
+ */
+function startNotifPump(): void {
+  if (notifPumpStarted) return;
+  notifPumpStarted = true;
+  setInterval(async () => {
+    if (!activeSock) return;
+    for (const n of drainNotifs()) {
+      try {
+        await activeSock.sendMessage(n.jid, { text: n.text });
+        logger.info({ jid: maskJid(n.jid) }, 'Push notification terkirim');
+      } catch (err) {
+        logger.warn({ err, jid: maskJid(n.jid) }, 'Gagal mengirim push notification');
+      }
+    }
+  }, 3000).unref();
+}
 
 /** Ambil teks dari berbagai tipe pesan WhatsApp. */
 function extractText(msg: proto.IWebMessageInfo): string {
@@ -40,6 +73,9 @@ export async function startBot(): Promise<void> {
     markOnlineOnConnect: false,
     browser: ['WA CS Bot', 'Chrome', '1.0.0'],
   });
+
+  activeSock = sock; // simpan referensi untuk pump push proaktif
+  startNotifPump(); // mulai pengirim notifikasi terjadwal (sekali)
 
   sock.ev.on('creds.update', saveCreds);
 
@@ -114,15 +150,26 @@ async function handleMessage(sock: WASocket, msg: proto.IWebMessageInfo): Promis
   // Perintah admin (broadcast proaktif) — hanya nomor terdaftar (akses terbatas / OWASP A01)
   const senderPhone = jid.split('@')[0] ?? '';
   if (config.admin.numbers.includes(senderPhone)) {
-    const adminReply = await handleAdminCommand(sock, text.trim().toLowerCase());
+    const adminReply = await handleAdminCommand(sock, text.trim());
     if (adminReply) {
       await sock.sendMessage(jid, { text: adminReply });
+      await flushOutbox(sock); // kirim notifikasi PO ke user (mis. penawaran/finalisasi)
       logger.info({ jid: maskJid(jid) }, 'Perintah admin dieksekusi');
       return;
     }
   }
 
   logger.info({ jid: maskJid(jid) }, 'Pesan masuk');
+
+  // Welcome card: "mulai"/"start" -> logo koperasi + caption + pilihan bernomor
+  if (WELCOME_TRIGGERS.has(text.toLowerCase())) {
+    setAiMode(jid, false); // reset: kalau lagi ngobrol AI, "mulai" mengembalikan ke menu awal
+    cancelActivation(jid); // reset: batalkan form aktivasi yang sedang berjalan
+    cancelPoForm(jid); // reset: batalkan form Pre-Order yang sedang berjalan
+    await sendWelcomeCard(sock, jid);
+    logger.info({ jid: maskJid(jid) }, 'Welcome card terkirim');
+    return;
+  }
 
   // Indikator "sedang mengetik" biar terasa natural
   try {
@@ -140,7 +187,36 @@ async function handleMessage(sock: WASocket, msg: proto.IWebMessageInfo): Promis
   }
 
   await sock.sendMessage(jid, { text: reply });
+  await flushOutbox(sock); // kirim notifikasi PO (mis. ke admin saat PO baru dibuat)
   logger.info({ jid: maskJid(jid) }, 'Balasan terkirim');
+}
+
+/** Kirim semua notifikasi proaktif yang diantre modul PO (ke user/admin lain). */
+async function flushOutbox(sock: WASocket): Promise<void> {
+  for (const n of drainOutbox()) {
+    try {
+      await sock.sendMessage(n.jid, { text: n.text });
+    } catch (err) {
+      logger.warn({ err, jid: maskJid(n.jid) }, 'Gagal mengirim notifikasi PO');
+    }
+  }
+}
+
+/**
+ * Kirim welcome card: logo koperasi + caption sambutan berisi pilihan bernomor.
+ * Caption disesuaikan status pengirim (prospek vs anggota). Kalau file logo
+ * tidak ada, tetap kirim caption sebagai teks biasa (jangan sampai gagal/crash).
+ */
+async function sendWelcomeCard(sock: WASocket, jid: string): Promise<void> {
+  const caption = welcomeCaption(jid);
+  const logoPath = config.wa.logoPath;
+
+  if (existsSync(logoPath)) {
+    await sock.sendMessage(jid, { image: { url: logoPath }, caption });
+  } else {
+    logger.warn({ logoPath }, 'File logo tidak ditemukan — kirim caption tanpa gambar');
+    await sock.sendMessage(jid, { text: caption });
+  }
 }
 
 /**
@@ -148,7 +224,12 @@ async function handleMessage(sock: WASocket, msg: proto.IWebMessageInfo): Promis
  * nomor tujuan. Ini "wow moment" fitur andalan: bot menghampiri anggota,
  * bukan menunggu. Return pesan balasan untuk admin, atau null bila bukan perintah.
  */
-async function handleAdminCommand(sock: WASocket, cmd: string): Promise<string | null> {
+async function handleAdminCommand(sock: WASocket, raw: string): Promise<string | null> {
+  const cmd = raw.toLowerCase();
+
+  // Command Pre-Order (po list/lihat/quote/alih/final/batal) — notifikasi user via outbox.
+  if (cmd === 'po' || cmd.startsWith('po ')) return handleAdminPo(raw);
+
   const isVote = cmd === 'push voting' || cmd === 'broadcast voting';
   const isNudge = cmd === 'push nudge' || cmd === 'broadcast nudge';
   if (!isVote && !isNudge) return null;

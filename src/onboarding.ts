@@ -1,13 +1,13 @@
 /**
  * Pengalaman CALON ANGGOTA (prospek) — menambal funnel Tahap 1 "Kenal".
  *
- * Hook utama: SIMULASI UNTUNG interaktif — kasih ANGKA personal (simpanan setahun,
- * estimasi SHU, hemat vs pinjol). Jujur & konkret, bukan over-promise. Alur
- * rule-based penuh biar stabil saat demo. Ketik "gabung" -> jadi anggota.
+ * Menu anggota TERKUNCI sampai prospek menyelesaikan aktivasi akun (lihat
+ * activation.ts, dipicu dari router). Di sini: penjelasan koperasi, simulasi
+ * untung (opsional via kata kunci), dan pesan "belum aktivasi" untuk menu.
  */
-import { koperasi, mainMenu } from './business';
+import { koperasi } from './business';
 import { rupiah } from './format';
-import { joinAsMember } from './members';
+import { prospectWelcome } from './welcome';
 
 // Konstanta ilustrasi (asumsi, bukan angka resmi) untuk pembanding "hemat".
 const KOPERASI_RATE = 0.01; // 1%/bln — selaras koperasi.pinjaman.jasa
@@ -18,20 +18,6 @@ const SHU_ESTIMATE_RATE = 0.1; // estimasi kasar SHU ~10% dari simpanan setahun
 
 // Prospek yang sedang ditanya "nabung berapa/bulan" di simulator.
 const simPending = new Set<string>();
-
-/** Sapaan pertama untuk prospek — benefit-led + social proof + CTA. */
-export function welcomeProspect(): string {
-  const s = koperasi.stats;
-  return (
-    `👋 Halo! Kenalin, *${koperasi.name}* 🌾\n\n` +
-    `Bukan sekadar nabung — di sini uangmu *balik lagi* & *tumbuh bareng warga*:\n` +
-    `💸 Dapat *SHU* (bagi hasil) tiap tahun\n` +
-    `🛡️ Pinjaman bunga *cuma ${koperasi.pinjaman.jasa}* — jauh lebih murah dari pinjol\n` +
-    `🤝 Punya *hak suara* — koperasi ini milik anggotanya\n\n` +
-    `_Udah ${s.anggota} warga gabung. Tahun lalu SHU dibagikan total ${rupiah(s.shuTahunLalu)}._ 🎉\n\n` +
-    `Penasaran kamu bisa dapat berapa? 👉 Ketik *untung* buat simulasi cepat, atau *gabung* buat langsung daftar.`
-  );
-}
 
 /** Penjelasan singkat & renyah "apa itu koperasi". */
 function explainer(): string {
@@ -97,15 +83,15 @@ function simResult(perMonth: number): string {
  * Begitu prospek "gabung", nomornya jadi anggota & pesan berikutnya masuk alur normal.
  */
 export function handleProspect(jid: string, text: string): string {
-  const t = text.trim().toLowerCase();
+  const raw = text.trim().toLowerCase();
 
-  // 1) Sedang di simulator -> tunggu nominal
+  // 1) Sedang di simulator -> tunggu nominal (pakai input mentah, jangan dipetakan)
   if (simPending.has(jid)) {
-    if (['batal', 'keluar', 'menu'].includes(t)) {
+    if (['batal', 'keluar', 'menu'].includes(raw)) {
       simPending.delete(jid);
-      return welcomeProspect();
+      return prospectWelcome();
     }
-    const amount = parseRupiah(t);
+    const amount = parseRupiah(raw);
     if (amount === null) {
       return `Hmm, belum kebaca angkanya 🙈. Ketik nominal nabung per bulan, mis. *100rb* atau *500000*. _(atau ketik *batal*)_`;
     }
@@ -113,19 +99,22 @@ export function handleProspect(jid: string, text: string): string {
     return simResult(amount);
   }
 
-  // 2) Gabung -> jadi anggota
-  if (['gabung', 'daftar', 'ya', 'iya', 'mau', 'join'].includes(t)) {
-    joinAsMember(jid);
+  // Pintasan angka dari welcome card (1 = penjelasan, 2 = Menu).
+  // Opsi 3 (ngobrol AI) & 4 (aktivasi) ditangani di router sebelum sampai sini.
+  const welcomeShortcut: Record<string, string> = { '1': 'apa itu koperasi', '2': 'menu' };
+  const t = welcomeShortcut[raw] ?? raw;
+
+  // 2) Menu TERKUNCI sampai user aktivasi akun dulu
+  if (t === 'menu') {
     return (
-      `🎉 *Selamat datang, anggota baru!*\n\n` +
-      `Pendaftaranmu tercatat (demo). Di dunia nyata, pengurus verifikasi KTP & simpanan pokok dulu — ketik *pengurus* buat dibantu.\n\n` +
-      `Sekarang kamu bisa akses semua layanan anggota 👇\n\n` +
-      mainMenu()
+      `🔒 Aduh, kamu belum aktivasi akun nih 😅\n\n` +
+      `Daftar dulu yuk biar bisa akses semua layanan anggota (simpanan, SHU, pinjaman, voting, dll).\n` +
+      `👉 Ketik *4* atau *aktivasi* untuk mulai — cuma beberapa langkah dari chat ini. 🙌`
     );
   }
 
   // 3) Mulai simulator (hook utama)
-  if (['untung', 'simulasi', 'simulasikan', 'hitung', 'cuan'].includes(t)) {
+  if (['untung', 'hitung untungku', 'hitung untung', 'simulasi', 'simulasikan', 'hitung', 'cuan'].includes(t)) {
     simPending.add(jid);
     return (
       `💡 Yuk simulasi untungmu! Kira-kira kamu bisa *nabung berapa per bulan?*\n\n` +
@@ -134,7 +123,9 @@ export function handleProspect(jid: string, text: string): string {
   }
 
   // 4) Penjelasan
-  if (['apa itu koperasi', 'apa itu', 'koperasi', 'manfaat', 'benefit', 'info'].includes(t)) {
+  if (
+    ['apa itu koperasi', 'apa itu', 'koperasi', 'belum ngerti koperasi', 'belum ngerti', 'gak ngerti', 'manfaat', 'benefit', 'info'].includes(t)
+  ) {
     return explainer();
   }
 
@@ -143,6 +134,6 @@ export function handleProspect(jid: string, text: string): string {
     return video();
   }
 
-  // 6) Default -> sapaan hook
-  return welcomeProspect();
+  // 6) Default -> tampilkan kembali pilihan welcome
+  return prospectWelcome();
 }

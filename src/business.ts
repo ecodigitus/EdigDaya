@@ -3,6 +3,8 @@
  * INI YANG KAMU EDIT untuk menyesuaikan ke koperasi nyata.
  * (Nama file 'business.ts' = profil organisasi; di sini organisasinya koperasi.)
  */
+import type { Member } from './members';
+
 export const koperasi = {
   name: 'Koperasi Merah Putih Desa Sukamaju',
   tagline: 'Dari anggota, oleh anggota, untuk anggota 🌾',
@@ -69,19 +71,31 @@ export const koperasiContext = `Informasi koperasi:
 FAQ:
 ${koperasi.faqs.map((f, i) => `${i + 1}. T: ${f.q}\n   J: ${f.a}`).join('\n')}`;
 
-/** Menu utama (rule-based) — memetakan seluruh funnel keterlibatan koperasi. */
-export function mainMenu(): string {
+/**
+ * Menu utama (rule-based) — memetakan seluruh funnel keterlibatan koperasi.
+ * Item 9 menyesuaikan PERAN anggota (POV member — papan tulis poin 2 & 3):
+ * produsen → Dashboard Usaha; anggota biasa → Ringkasan Keuangan.
+ */
+export function mainMenu(m?: Member): string {
+  const item9 = m
+    ? m.role === 'produsen'
+      ? `9️⃣  Dashboard Usaha saya (produsen) 🏪\n`
+      : `9️⃣  Keuangan saya (modal & belanja) 📊\n`
+    : '';
   return (
     `🌾 Selamat datang di *${koperasi.name}*\n` +
     `_Asisten Anggota — siap bantu kapan saja 🤝_\n\n` +
     `Ketik *angka* atau *kata kunci*:\n` +
-    `1️⃣  Info & cara jadi anggota\n` +
-    `2️⃣  Simpanan saya\n` +
-    `3️⃣  Estimasi SHU saya\n` +
-    `4️⃣  Pinjaman\n` +
-    `5️⃣  e-RAT & voting\n` +
-    `6️⃣  Poin & misi saya\n` +
-    `7️⃣  Hubungi pengurus\n\n` +
+    `1️⃣  Simpanan saya\n` +
+    `2️⃣  Estimasi SHU saya\n` +
+    `3️⃣  Pinjaman\n` +
+    `4️⃣  e-RAT & voting\n` +
+    `5️⃣  Poin & misi saya\n` +
+    `6️⃣  Hubungi pengurus\n` +
+    `7️⃣  Ajak teman (kode referral) 🤝\n` +
+    `8️⃣  Pre-Order barang (PO) 📦\n` +
+    item9 +
+    `\n` +
     `Atau tanya bebas, mis. *"cara nambah simpanan?"* 😊`
   );
 }
