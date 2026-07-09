@@ -112,8 +112,9 @@ export async function route(jid: string, text: string): Promise<string> {
     return chatWithAssistant(jid, text, member);
   }
 
-  // C) Masuk mode ngobrol AI — opsi 3 di kartu prospek, atau kata kunci (semua user)
-  if (AI_ENTER.has(t) || (t === '3' && member === null)) {
+  // C) Masuk mode ngobrol AI — opsi 3 di kartu prospek, opsi 10 di menu anggota,
+  //    atau kata kunci (semua user)
+  if (AI_ENTER.has(t) || (t === '3' && member === null) || (t === '10' && member !== null)) {
     if (!aiEnabled) {
       return `🤖 Fitur ngobrol dengan asisten AI belum aktif. Set *${activeKeyEnv}* di .env untuk mengaktifkannya. Sementara, ketik *menu* untuk pilihan lain ya. 🙏`;
     }

@@ -95,6 +95,7 @@ export function mainMenu(m?: Member): string {
     `7️⃣  Ajak teman (kode referral) 🤝\n` +
     `8️⃣  Pre-Order barang (PO) 📦\n` +
     item9 +
+    `🔟  Ngobrol dengan asisten AI 🤖\n` +
     `\n` +
     `Atau tanya bebas, mis. *"cara nambah simpanan?"* 😊`
   );
