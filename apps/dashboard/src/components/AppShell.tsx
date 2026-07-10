@@ -39,6 +39,7 @@ const WA_NAV: NavItem[] = [
   { to: "/", label: "Beranda", icon: "home", end: true },
   { to: "/simpanan", label: "Simpanan", icon: "savings" },
   { to: "/referral", label: "Referral", icon: "campaign" },
+  { to: "/profil", label: "Profil", icon: "person" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {

@@ -9,6 +9,7 @@ import { Nasional } from "./pages/Nasional";
 import { WaBeranda } from "./pages/wa/Beranda";
 import { WaSimpanan } from "./pages/wa/Simpanan";
 import { WaReferral } from "./pages/wa/Referral";
+import { WaProfil } from "./pages/wa/Profil";
 
 import { PengurusOverview } from "./pages/pengurus/Overview";
 import { PengurusAnggota } from "./pages/pengurus/Anggota";
@@ -69,6 +70,7 @@ function AuthedApp({ role }: { role: Role }) {
           <Route path="/" element={<WaBeranda />} />
           <Route path="/simpanan" element={<WaSimpanan />} />
           <Route path="/referral" element={<WaReferral />} />
+          <Route path="/profil" element={<WaProfil />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       ) : (
