@@ -39,10 +39,24 @@ export type Keuangan = {
   pengeluaran: number; // total pengeluaran periode berjalan
 };
 
+/** Data dari hasil pendaftaran/aktivasi (opsional; ditampilkan di menu Informasi Saya). */
+export type Pendaftaran = {
+  nik?: string;
+  jenisKelamin?: string;
+  email?: string;
+  nomorHp?: string;
+  provinsi?: string;
+  kabupaten?: string;
+  kecamatan?: string;
+  desa?: string;
+  koperasi?: string; // koperasi yang dipilih saat daftar
+};
+
 export type Member = {
   nama: string;
   noAnggota: string;
   sejak: string;
+  pendaftaran?: Pendaftaran; // detail hasil pendaftaran (opsional)
   role: MemberRole; // penanda peran per-nomor (produsen vs anggota biasa)
   simpananPokok: number;
   simpananWajib: number;
@@ -174,6 +188,7 @@ function rowToMember(r: Record<string, any>): Member {
     kodeReferral: r.kode_referral ?? '',
     keuangan: r.keuangan ?? { modal: 0, pengeluaran: 0 },
     usaha: r.usaha ?? null,
+    pendaftaran: r.pendaftaran ?? undefined,
   };
 }
 
@@ -198,6 +213,9 @@ function memberToRow(m: Member, phone?: string): Record<string, unknown> {
     updated_at: new Date().toISOString(),
   };
   if (phone) row.phone = phone; // tak disertakan saat undefined -> tak menimpa phone di DB
+  // Sertakan pendaftaran hanya bila ada -> update anggota lama tetap jalan walau
+  // kolom `pendaftaran` belum dibuat (jalankan supabase/informasi-lengkap.sql).
+  if (m.pendaftaran) row.pendaftaran = m.pendaftaran;
   return row;
 }
 
@@ -234,12 +252,13 @@ export function forgetMember(jid: string): boolean {
 }
 
 /** Bangun profil anggota BARU (saldo nol) dari data aktivasi. */
-export function newMemberProfile(nama: string, noAnggota: string): Member {
+export function newMemberProfile(nama: string, noAnggota: string, pendaftaran?: Pendaftaran): Member {
   const sejak = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
   return {
     nama,
     noAnggota,
     sejak,
+    pendaftaran,
     role: 'anggota', // anggota baru default konsumen biasa (poin 3); ubah ke 'produsen' bila punya usaha
     simpananPokok: 0,
     simpananWajib: 0,

@@ -55,7 +55,7 @@ const PO_LIST = new Set(['po', 'po saya', 'pesanan saya', 'pesananku', 'pesanan'
 
 // Kata kunci Dashboard Usaha/Keuangan (POV member — papan tulis poin 2 & 3).
 const DASHBOARD_ENTER = new Set([
-  '9',
+  '10',
   'usaha',
   'dashboard',
   'dashboard usaha',
@@ -75,17 +75,17 @@ const VIEW_ANGGOTA = new Set(['mode anggota', 'lihat sebagai anggota', 'demo ang
 // Kata kunci Setor Simpanan (khusus anggota) — pokok/wajib/sukarela lewat 1 engine.
 const SETOR_ENTER = new Set(['setor', 'setor simpanan', 'bayar simpanan', 'nabung', 'menabung', 'setor tunai']);
 
-// Kata kunci menu baru (khusus anggota). "pengurus" polos tetap = handoff (menu 6),
+// Kata kunci menu baru (khusus anggota). "pengurus" polos tetap = handoff (menu 7),
 // jadi pengurus di sini pakai frasa spesifik.
-const PENGURUS_ENTER = new Set(['11', 'daftar pengurus', 'susunan pengurus', 'pengurus lengkap']);
-const PENGUMUMAN_ENTER = new Set(['12', 'pengumuman', 'pengumuman koperasi', 'kabar koperasi']);
+const PENGURUS_ENTER = new Set(['12', 'daftar pengurus', 'susunan pengurus', 'pengurus lengkap']);
+const PENGUMUMAN_ENTER = new Set(['13', 'pengumuman', 'pengumuman koperasi', 'kabar koperasi']);
 const LAPORAN_LIST = new Set(['daftar laporan', 'lihat laporan', 'list laporan', 'riwayat laporan']);
-// Catatan: "laporan" polos sengaja TIDAK dipakai di sini (sudah = dashboard usaha, menu 9).
-const LAPORAN_ENTER = new Set(['13', 'anggota jaga anggota', 'jaga anggota', 'lapor', 'buat laporan']);
+// Catatan: "laporan" polos sengaja TIDAK dipakai di sini (sudah = dashboard usaha, menu 10).
+const LAPORAN_ENTER = new Set(['14', 'anggota jaga anggota', 'jaga anggota', 'lapor', 'buat laporan']);
 
-// Menu 14 — Koperasi Global (statistik nasional, read-only dari DB hackathon).
+// Menu 15 — Koperasi Global (statistik nasional, read-only dari DB hackathon).
 const KOPGLOBAL_ENTER = new Set([
-  '14',
+  '15',
   'koperasi global',
   'data nasional',
   'koperasi nasional',
@@ -143,9 +143,9 @@ export async function route(jid: string, text: string): Promise<string> {
     return chatWithAssistant(jid, text, member);
   }
 
-  // C) Masuk mode ngobrol AI — opsi 4 di kartu prospek, opsi 10 di menu anggota,
+  // C) Masuk mode ngobrol AI — opsi 4 di kartu prospek, opsi 11 di menu anggota,
   //    atau kata kunci (semua user)
-  if (AI_ENTER.has(t) || (t === '4' && member === null) || (t === '10' && member !== null)) {
+  if (AI_ENTER.has(t) || (t === '4' && member === null) || (t === '11' && member !== null)) {
     if (!aiEnabled) {
       return `🤖 Fitur ngobrol dengan asisten AI belum aktif. Set *${activeKeyEnv}* di .env untuk mengaktifkannya. Sementara, ketik *menu* untuk pilihan lain ya. 🙏`;
     }
@@ -175,7 +175,7 @@ export async function route(jid: string, text: string): Promise<string> {
   if (inLaporan(jid)) return handleLaporan(jid, member, text);
 
   // E2) Pre-Order (khusus anggota): buat PO, balas penawaran, atau lihat daftar
-  if (t === '8' || PO_ENTER.has(t)) return startPoForm(jid, member.nama);
+  if (t === '9' || PO_ENTER.has(t)) return startPoForm(jid, member.nama);
   const poReply = handlePoUserReply(jid, text);
   if (poReply !== null) return poReply;
   if (PO_LIST.has(t)) return listUserPo(jid);

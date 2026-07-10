@@ -129,7 +129,17 @@ export async function instantActivation(jid: string): Promise<string> {
 
   const res = await submitActivation(dummy);
   const noAnggota = (res.ok && res.noAnggota) || 'KMP-DEMO';
-  const profile = newMemberProfile(dummy.namaLengkap, noAnggota);
+  const profile = newMemberProfile(dummy.namaLengkap, noAnggota, {
+    nik: dummy.nik,
+    jenisKelamin: dummy.jenisKelamin,
+    email: dummy.email,
+    nomorHp: dummy.nomorHp,
+    provinsi: dummy.provinsi,
+    kabupaten: dummy.kabupaten,
+    kecamatan: dummy.kecamatan,
+    desa: dummy.desa,
+    koperasi: dummy.koperasi,
+  });
   activateMember(jid, profile);
 
   return (
@@ -328,7 +338,17 @@ async function finish(jid: string, d: Draft): Promise<string> {
   }
 
   const noAnggota = res.noAnggota ?? 'KMP-BARU';
-  const profile = newMemberProfile(d.namaLengkap!, noAnggota);
+  const profile = newMemberProfile(d.namaLengkap!, noAnggota, {
+    nik: d.nik,
+    jenisKelamin: d.jenisKelamin,
+    email: d.email,
+    nomorHp: d.nomorHp,
+    provinsi: d.provinsi,
+    kabupaten: d.kabupaten,
+    kecamatan: d.kecamatan,
+    desa: d.desa,
+    koperasi: d.koperasi,
+  });
   activateMember(jid, profile);
   drafts.delete(jid);
 
