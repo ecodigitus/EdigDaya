@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Secrets — JANGAN pernah di-commit
+.env
+.env.*
+!.env.example
+
+# WhatsApp auth/session credentials — setara token login, JANGAN di-commit
+auth/
+
+# Service account Google (Vertex AI) — RAHASIA, JANGAN di-commit
+*-sa.json
+vertex-sa.json
+*service-account*.json
+
+# Logs
+*.log
+logs/
+
+# OS junk
+.DS_Store
+Thumbs.db
