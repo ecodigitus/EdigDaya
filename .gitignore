@@ -9,6 +9,11 @@ node_modules/
 # WhatsApp auth/session credentials — setara token login, JANGAN di-commit
 auth/
 
+# Service account Google (Vertex AI) — RAHASIA, JANGAN di-commit
+*-sa.json
+vertex-sa.json
+*service-account*.json
+
 # Logs
 *.log
 logs/

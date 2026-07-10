@@ -3,6 +3,7 @@ import { config, aiEnabled } from './config';
 import { koperasi, koperasiContext } from './business';
 import { rupiah } from './format';
 import { totalSimpanan, hitungSkorKeterlibatan, type Member } from './members';
+import { callVertex } from './vertex';
 import type { ChatMessage } from './session';
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -84,7 +85,9 @@ export async function generateReply(
       ? await callAnthropic(system, messages)
       : config.ai.provider === 'gemini'
         ? await callGemini(system, messages)
-        : await callGroq(system, messages);
+        : config.ai.provider === 'vertex'
+          ? await callVertex(system, messages)
+          : await callGroq(system, messages);
 
   return text.trim() || FALLBACK_REPLY;
 }
@@ -100,7 +103,9 @@ export async function completeRaw(system: string, userText: string): Promise<str
     ? callAnthropic(system, messages)
     : config.ai.provider === 'gemini'
       ? callGemini(system, messages)
-      : callGroq(system, messages);
+      : config.ai.provider === 'vertex'
+        ? callVertex(system, messages)
+        : callGroq(system, messages);
 }
 
 /** Panggil Claude (Anthropic). */

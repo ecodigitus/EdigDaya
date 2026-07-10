@@ -22,8 +22,14 @@ function list(name: string): string[] {
 // Penyedia AI aktif: 'groq' (default), 'anthropic' (Claude), atau 'gemini' (GCP).
 // Ganti AI_PROVIDER + isi API key yang sesuai di .env.
 const aiProviderRaw = process.env.AI_PROVIDER?.trim().toLowerCase();
-const aiProvider: 'groq' | 'anthropic' | 'gemini' =
-  aiProviderRaw === 'anthropic' ? 'anthropic' : aiProviderRaw === 'gemini' ? 'gemini' : 'groq';
+const aiProvider: 'groq' | 'anthropic' | 'gemini' | 'vertex' =
+  aiProviderRaw === 'anthropic'
+    ? 'anthropic'
+    : aiProviderRaw === 'gemini'
+      ? 'gemini'
+      : aiProviderRaw === 'vertex'
+        ? 'vertex'
+        : 'groq';
 
 export const config = {
   ai: {
@@ -46,6 +52,15 @@ export const config = {
     apiKey: process.env.GEMINI_API_KEY?.trim() ?? '',
     model: process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash',
     maxTokens: num('GEMINI_MAX_TOKENS', 1024),
+  },
+  vertex: {
+    // Vertex AI (Gemini via SERVICE ACCOUNT) — pakai billing GCP standar → credit
+    // $300 kepakai (beda dari Gemini API/AI Studio yg prepaid). KOSONG = nonaktif.
+    keyFile: process.env.VERTEX_SA_KEY_FILE?.trim() ?? '', // path ke JSON service account (RAHASIA, gitignored)
+    project: process.env.VERTEX_PROJECT_ID?.trim() ?? '', // opsional; default dari JSON (project_id)
+    location: process.env.VERTEX_LOCATION?.trim() || 'us-central1',
+    model: process.env.VERTEX_MODEL?.trim() || 'gemini-2.0-flash',
+    maxTokens: num('VERTEX_MAX_TOKENS', 1024),
   },
   supabase: {
     // (Legacy) DB Supabase — masih dipakai dashboard web (belum dimigrasi).
@@ -116,7 +131,9 @@ export const aiEnabled =
     ? config.anthropic.apiKey.length > 0
     : config.ai.provider === 'gemini'
       ? config.gemini.apiKey.length > 0
-      : config.groq.apiKey.length > 0;
+      : config.ai.provider === 'vertex'
+        ? config.vertex.keyFile.length > 0
+        : config.groq.apiKey.length > 0;
 
 /** Nama model provider yang sedang aktif (untuk logging/diagnostik). */
 export const activeModel =
@@ -124,12 +141,16 @@ export const activeModel =
     ? config.anthropic.model
     : config.ai.provider === 'gemini'
       ? config.gemini.model
-      : config.groq.model;
+      : config.ai.provider === 'vertex'
+        ? config.vertex.model
+        : config.groq.model;
 
-/** Nama env var API key yang perlu diisi untuk provider aktif (untuk pesan bantuan). */
+/** Nama env var yang perlu diisi untuk provider aktif (untuk pesan bantuan). */
 export const activeKeyEnv =
   config.ai.provider === 'anthropic'
     ? 'ANTHROPIC_API_KEY'
     : config.ai.provider === 'gemini'
       ? 'GEMINI_API_KEY'
-      : 'GROQ_API_KEY';
+      : config.ai.provider === 'vertex'
+        ? 'VERTEX_SA_KEY_FILE'
+        : 'GROQ_API_KEY';
