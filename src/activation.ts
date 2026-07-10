@@ -20,6 +20,7 @@ import { listProvinsi, listKabupaten, listKecamatan, listDesa, listKoperasi } fr
 import { isValidCode, ownerName, creditReferral, POIN_PER_AJAKAN } from './referral';
 
 type Step =
+  | 'mode'
   | 'refopt'
   | 'refcode'
   | 'nama'
@@ -74,16 +75,30 @@ export function cancelActivation(jid: string): void {
   drafts.delete(jid);
 }
 
-/** Mulai form aktivasi — mulai dari pilihan cara daftar (pribadi / referral). */
-export function startActivation(jid: string): string {
-  drafts.set(jid, { step: 'refopt' });
+/**
+ * Sub-menu awal aktivasi (dipakai opsi 4 / kata kunci aktivasi): user memilih
+ * mau aktivasi KILAT (demo, data contoh) atau ISI FORM lengkap 12 langkah.
+ */
+export function startActivationMenu(jid: string): string {
+  drafts.set(jid, { step: 'mode' });
   return (
     `📋 *Aktivasi Akun Anggota Koperasi*\n` +
     `Ketik *batal* kapan saja untuk berhenti.\n\n` +
-    `Mau daftar gimana? (balas angka)\n` +
-    `1. Daftar pribadi\n` +
-    `2. Pakai kode referral _(diajak teman)_`
+    `Mau aktivasi yang mana? (balas angka)\n` +
+    `1. ⚡ *Aktivasi kilat* _(demo — langsung jadi, pakai data contoh)_\n` +
+    `2. 📝 *Isi form lengkap* _(12 langkah, isi data sendiri)_`
   );
+}
+
+/** Mulai form aktivasi — mulai dari pilihan cara daftar (pribadi / referral). */
+export function startActivation(jid: string): string {
+  drafts.set(jid, { step: 'refopt' });
+  return `📋 *Aktivasi Akun Anggota Koperasi*\n` + `Ketik *batal* kapan saja untuk berhenti.\n\n` + refoptPrompt();
+}
+
+/** Prompt pilihan cara daftar (pribadi / referral). */
+function refoptPrompt(): string {
+  return `Mau daftar gimana? (balas angka)\n` + `1. Daftar pribadi\n` + `2. Pakai kode referral _(diajak teman)_`;
 }
 
 /** Prompt awal Bagian 1 (dipakai setelah pilihan referral selesai). */
@@ -122,6 +137,16 @@ export async function instantActivation(jid: string): Promise<string> {
     `Kamu aktif sebagai *${dummy.namaLengkap}* _(data contoh)_.\n` +
     `Nomor anggota: *${noAnggota}*\n` +
     `Kode referral kamu: *${profile.kodeReferral}*\n\n` +
+    `📝 *Data yang dipakai _(contoh)_:*\n` +
+    `• Nama: ${dummy.namaLengkap}\n` +
+    `• NIK: ${maskNik(dummy.nik)}\n` +
+    `• Jenis Kelamin: ${dummy.jenisKelamin}\n` +
+    `• Email: ${dummy.email}\n` +
+    `• No. HP: ${dummy.nomorHp}\n` +
+    `• Wilayah: ${dummy.desa}, ${dummy.kecamatan}, ${dummy.kabupaten}, ${dummy.provinsi}\n` +
+    `• Koperasi: ${dummy.koperasi}\n` +
+    `• Pernyataan Domisili: ✅\n` +
+    `• Persetujuan UU PDP: ✅\n\n` +
     `_Mau isi form lengkap beneran? Ketik *aktivasi manual*._\n\n` +
     `💳 Simpanan pokok *${rupiah(koperasi.simpanan.pokok)}* belum dibayar — ketik *setor* untuk bayar sekarang (bisa juga nanti lewat *menu → 1*).\n\n` +
     `Sekarang semua layanan kebuka. Ketik *menu* ya! 🙌`
@@ -141,6 +166,13 @@ export async function handleActivation(jid: string, text: string): Promise<strin
   }
 
   switch (d.step) {
+    case 'mode': {
+      const v = parseChoice(raw, ['Aktivasi kilat', 'Isi form lengkap']);
+      if (!v) return err('Pilih *1* (aktivasi kilat) atau *2* (isi form lengkap).');
+      if (v === 'Aktivasi kilat') return instantActivation(jid); // instantActivation menghapus draft
+      d.step = 'refopt';
+      return refoptPrompt();
+    }
     case 'refopt': {
       const v = parseChoice(raw, ['Daftar pribadi', 'Pakai kode referral']);
       if (!v) return err('Pilih *1* (daftar pribadi) atau *2* (pakai kode referral).');

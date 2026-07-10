@@ -36,6 +36,21 @@ export async function fetchAll(table: string): Promise<Record<string, any>[]> {
 }
 
 /**
+ * Sisipkan satu baris (append-only) dan kembalikan baris yang tersimpan
+ * (berisi kolom auto seperti id & created_at). Kembalikan null bila DB nonaktif
+ * atau error (tak melempar) — pemanggil boleh fallback ke data lokal.
+ */
+export async function insertRow(table: string, row: Record<string, unknown>): Promise<Record<string, any> | null> {
+  if (!client) return null;
+  const { data, error } = await client.from(table).insert(row).select().single();
+  if (error) {
+    logger.error({ err: error.message, table }, 'Supabase insertRow gagal');
+    return null;
+  }
+  return data ?? null;
+}
+
+/**
  * Upsert satu baris. Dipanggil fire-and-forget (pemanggil tak perlu await) —
  * error hanya di-log, tak pernah menggagalkan alur bot. No-op bila DB nonaktif.
  */

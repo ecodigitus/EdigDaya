@@ -20,7 +20,7 @@ export function prospectWelcome(): string {
     `2️⃣  Menu\n` +
     `3️⃣  Ngobrol dengan asisten koperasi\n` +
     `4️⃣  Aktivasi Akun Anggota Koperasi\n\n` +
-    `_Belum punya akun? Pilih *4* buat aktivasi kilat (demo). Ketik *aktivasi manual* buat isi form lengkap._`
+    `_Belum punya akun? Pilih *4* — nanti bisa pilih aktivasi kilat (demo) atau isi form lengkap._`
   );
 }
 

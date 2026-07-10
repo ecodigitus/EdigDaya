@@ -11,6 +11,7 @@ import { config } from './config';
 import { logger, waLogger, maskJid } from './logger';
 import { allowed, setAiMode } from './session';
 import { cancelActivation } from './activation';
+import { cancelLaporan } from './laporan';
 import { cancelPoForm, drainOutbox, handleAdminPo } from './preorder';
 import { route } from './router';
 import { getMember } from './members';
@@ -165,6 +166,7 @@ async function handleMessage(sock: WASocket, msg: proto.IWebMessageInfo): Promis
   if (WELCOME_TRIGGERS.has(text.toLowerCase())) {
     setAiMode(jid, false); // reset: kalau lagi ngobrol AI, "mulai" mengembalikan ke menu awal
     cancelActivation(jid); // reset: batalkan form aktivasi yang sedang berjalan
+    cancelLaporan(jid); // reset: batalkan form laporan (menu 13) yang sedang berjalan
     cancelPoForm(jid); // reset: batalkan form Pre-Order yang sedang berjalan
     await sendWelcomeCard(sock, jid);
     logger.info({ jid: maskJid(jid) }, 'Welcome card terkirim');

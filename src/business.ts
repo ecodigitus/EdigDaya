@@ -96,6 +96,9 @@ export function mainMenu(m?: Member): string {
     `8️⃣  Pre-Order barang (PO) 📦\n` +
     item9 +
     `🔟  Ngobrol dengan asisten AI 🤖\n` +
+    `*11.* Daftar pengurus 👥\n` +
+    `*12.* Pengumuman 📢\n` +
+    `*13.* Anggota Jaga Anggota 🛡️\n` +
     `\n` +
     `Atau tanya bebas, mis. *"cara nambah simpanan?"* 😊`
   );

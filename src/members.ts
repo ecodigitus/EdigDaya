@@ -265,3 +265,16 @@ export function getMember(jid: string): Member {
 export function totalSimpanan(m: Member): number {
   return m.simpananPokok + m.simpananWajib + m.simpananSukarela;
 }
+
+/**
+ * Daftar JID semua anggota aktif (byPhone hasil seed/hydrate + registered sesi ini).
+ * Dipakai broadcast (mis. notif laporan transparansi). `exclude` untuk melewati
+ * satu JID (mis. pelapor sendiri). JID dinormalisasi & dedupe.
+ */
+export function allMemberJids(exclude?: string): string[] {
+  const jids = new Set<string>();
+  for (const phone of Object.keys(byPhone)) jids.add(`${phone}@s.whatsapp.net`);
+  for (const jid of Object.keys(registered)) jids.add(jid);
+  if (exclude) jids.delete(exclude);
+  return [...jids];
+}

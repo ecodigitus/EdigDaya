@@ -3,10 +3,13 @@ import { generateReply } from './ai';
 import { getHistory, record, inAiMode, setAiMode } from './session';
 import { getMember, isMember, forgetMember, type Member } from './members';
 import { handleProspect } from './onboarding';
-import { inActivation, startActivation, handleActivation, instantActivation, cancelActivation } from './activation';
+import { inActivation, startActivation, startActivationMenu, handleActivation, cancelActivation } from './activation';
 import { inPoForm, handlePoForm, startPoForm, handlePoUserReply, listUserPo } from './preorder';
 import { dashboard, setViewRole } from './usaha';
 import { inSetor, handleSetor, startSetor } from './simpanan';
+import { pengurusView } from './pengurus';
+import { pengumumanView } from './pengumuman';
+import { inLaporan, startLaporan, handleLaporan, listLaporan, cancelLaporan } from './laporan';
 import { handleNotifDemo } from './notifications';
 import { handleCampaignReply, matchTrigger } from './campaigns';
 import { config, aiEnabled, activeKeyEnv } from './config';
@@ -67,6 +70,14 @@ const VIEW_ANGGOTA = new Set(['mode anggota', 'lihat sebagai anggota', 'demo ang
 // Kata kunci Setor Simpanan (khusus anggota) — pokok/wajib/sukarela lewat 1 engine.
 const SETOR_ENTER = new Set(['setor', 'setor simpanan', 'bayar simpanan', 'nabung', 'menabung', 'setor tunai']);
 
+// Kata kunci menu baru (khusus anggota). "pengurus" polos tetap = handoff (menu 6),
+// jadi pengurus di sini pakai frasa spesifik.
+const PENGURUS_ENTER = new Set(['11', 'daftar pengurus', 'susunan pengurus', 'pengurus lengkap']);
+const PENGUMUMAN_ENTER = new Set(['12', 'pengumuman', 'pengumuman koperasi', 'kabar koperasi']);
+const LAPORAN_LIST = new Set(['daftar laporan', 'lihat laporan', 'list laporan', 'riwayat laporan']);
+// Catatan: "laporan" polos sengaja TIDAK dipakai di sini (sudah = dashboard usaha, menu 9).
+const LAPORAN_ENTER = new Set(['13', 'anggota jaga anggota', 'jaga anggota', 'lapor', 'buat laporan']);
+
 // DEMO: reset status nomor → kembali jadi calon anggota (untuk ulang demo aktivasi ke juri).
 const RESET = new Set(['reset', 'reset demo']);
 
@@ -82,6 +93,7 @@ export async function route(jid: string, text: string): Promise<string> {
   if (RESET.has(t)) {
     forgetMember(jid); // in-memory saja (non-destruktif; data Supabase tetap)
     cancelActivation(jid);
+    cancelLaporan(jid);
     setAiMode(jid, false);
     return (
       `🔄 *Reset demo berhasil.* Nomor ini kembali jadi *calon anggota*.\n\n` +
@@ -123,17 +135,20 @@ export async function route(jid: string, text: string): Promise<string> {
   }
 
   // D) Aktivasi akun (khusus non-anggota):
-  //    - "aktivasi manual" dll → form lengkap 12 langkah
-  //    - opsi 4 / kata kunci    → aktivasi KILAT pakai data contoh (demo cepat)
+  //    - "aktivasi manual" dll → langsung ke form lengkap 12 langkah
+  //    - opsi 4 / kata kunci    → sub-menu: pilih aktivasi KILAT atau ISI FORM
   if (member === null && ACTIVATION_MANUAL.has(t)) {
     return startActivation(jid);
   }
   if (member === null && (t === '4' || ACTIVATION_ENTER.has(t))) {
-    return instantActivation(jid);
+    return startActivationMenu(jid);
   }
 
   // E) Prospek (belum aktivasi) → alur onboarding (menu terkunci sampai aktivasi)
   if (member === null) return handleProspect(jid, text);
+
+  // E0) Sedang di alur "Anggota Jaga Anggota" (menu 13) → lanjutkan langkahnya
+  if (inLaporan(jid)) return handleLaporan(jid, member, text);
 
   // E2) Pre-Order (khusus anggota): buat PO, balas penawaran, atau lihat daftar
   if (t === '8' || PO_ENTER.has(t)) return startPoForm(jid, member.nama);
@@ -146,6 +161,12 @@ export async function route(jid: string, text: string): Promise<string> {
   if (VIEW_PRODUSEN.has(t)) return setViewRole(jid, 'produsen');
   if (VIEW_ANGGOTA.has(t)) return setViewRole(jid, 'anggota');
   if (DASHBOARD_ENTER.has(t)) return dashboard(jid, member);
+
+  // E4) Menu baru: pengurus (11) / pengumuman (12) / anggota jaga anggota (13)
+  if (PENGURUS_ENTER.has(t)) return pengurusView();
+  if (PENGUMUMAN_ENTER.has(t)) return pengumumanView();
+  if (LAPORAN_LIST.has(t)) return listLaporan();
+  if (LAPORAN_ENTER.has(t)) return startLaporan(jid);
 
   // F) Balasan untuk campaign yang sedang menunggu (voting / nudge)
   const campaignReply = handleCampaignReply(jid, text, member);
