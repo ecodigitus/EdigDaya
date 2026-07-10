@@ -34,13 +34,19 @@ const ANGGOTA_NAV: NavItem[] = [
   { to: "/profil", label: "Profil", icon: "person" },
 ];
 
+// Anggota yang login via akun WhatsApp (data dari edig_dev_members).
+const WA_NAV: NavItem[] = [{ to: "/", label: "Beranda", icon: "home", end: true }];
+
 export function AppShell({ children }: { children: ReactNode }) {
   const { session, logout } = useAuth();
   const [open, setOpen] = useState(false);
-  const isMember = session?.role === "anggota";
-  const nav = isMember ? ANGGOTA_NAV : PENGURUS_NAV;
-  const roleLabel = isMember ? "Anggota" : "Pengurus";
-  const brand = isMember ? "Portal Anggota" : "Koperasi Ops";
+  const role = session?.role;
+  const isWa = role === "anggota_wa";
+  const isMemberish = role === "anggota" || isWa;
+  const nav = isWa ? WA_NAV : role === "anggota" ? ANGGOTA_NAV : PENGURUS_NAV;
+  const roleLabel = isWa ? "Anggota (WA)" : role === "anggota" ? "Anggota" : "Pengurus";
+  const brand = isMemberish ? "Portal Anggota" : "Koperasi Ops";
+  const scopeLabel = session?.koperasi_ref || session?.no_anggota || "";
 
   const links = (
     <nav className="flex-1 px-3 space-y-1 overflow-y-auto py-2">
@@ -64,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div data-skin={isMember ? "member" : undefined} className="min-h-screen bg-bg text-ink">
+    <div data-skin={isMemberish ? "member" : undefined} className="min-h-screen bg-bg text-ink">
       <aside className="hidden md:flex fixed inset-y-0 left-0 w-64 flex-col border-r border-line bg-surface">
         <Brand brand={brand} />
         {links}
@@ -94,7 +100,8 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-ink truncate">{session?.nama ?? "—"}</p>
             <p className="text-xs text-muted truncate">
-              {roleLabel} · {session?.koperasi_ref}
+              {roleLabel}
+              {scopeLabel ? ` · ${scopeLabel}` : ""}
             </p>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 text-accent px-3 py-1 text-xs font-semibold">

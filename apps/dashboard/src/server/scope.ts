@@ -18,3 +18,10 @@ export function anggotaScope(session: Session | null): { koperasi_ref: string; a
   if (!koperasi_ref || !anggota_ref) throw new Error("Missing anggota scope in session");
   return { koperasi_ref, anggota_ref };
 }
+
+/** Scope for WA members: the member's own no_anggota (PK of edig_dev_members). */
+export function waScope(session: Session | null): string {
+  const no = session?.no_anggota;
+  if (!no) throw new Error("Missing anggota_wa scope in session");
+  return no;
+}

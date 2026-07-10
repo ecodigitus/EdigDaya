@@ -5,13 +5,14 @@
  */
 import { config } from "./config";
 
-export type Role = "pengurus" | "anggota";
+export type Role = "pengurus" | "anggota" | "anggota_wa";
 
 export type Session = {
   sub: string; // subject: user id (Fase B) or "bypass:<ref>"
   role: Role;
-  koperasi_ref: string; // tenant scope — required for both roles
+  koperasi_ref: string; // tenant scope — required for pengurus/anggota; "" for pure-WA members
   anggota_ref?: string; // required for the anggota role
+  no_anggota?: string; // required for the anggota_wa role (PK of edig_dev_members)
   nama?: string;
   exp: number; // epoch seconds
 };

@@ -7,6 +7,7 @@ import { SearchInput } from "../components/page";
 
 type Kop = { koperasi_ref: string; nama_koperasi: string };
 type Agt = { anggota_ref: string; nama: string; status_keanggotaan?: string };
+type Wa = { no_anggota: string; nama: string; phone: string | null };
 
 function useDebounced<T>(v: T, ms = 300): T {
   const [d, setD] = useState(v);
@@ -41,8 +42,18 @@ export function Login() {
     role === "anggota" && !!kop && !agt,
   );
 
-  const skin = role === "anggota" ? "member" : undefined;
-  const canSubmit = role === "pengurus" ? !!kop : !!kop && !!agt;
+  const [waMember, setWaMember] = useState<Wa | null>(null);
+  const [waQ, setWaQ] = useState("");
+  const waQd = useDebounced(waQ);
+  const waList = useApi<{ data: Wa[] }>(
+    ["login/anggota-wa", waQd],
+    `/api/auth/anggota-wa?q=${encodeURIComponent(waQd)}&limit=20`,
+    role === "anggota_wa" && !waMember,
+  );
+
+  const skin = role === "anggota" || role === "anggota_wa" ? "member" : undefined;
+  const canSubmit =
+    role === "pengurus" ? !!kop : role === "anggota_wa" ? !!waMember : !!kop && !!agt;
 
   async function submit() {
     if (!canSubmit) return;
@@ -50,6 +61,7 @@ export function Login() {
     setError(null);
     try {
       if (role === "pengurus") await login({ role: "pengurus", koperasi_ref: kop!.koperasi_ref });
+      else if (role === "anggota_wa") await login({ role: "anggota_wa", no_anggota: waMember!.no_anggota });
       else await login({ role: "anggota", anggota_ref: agt!.anggota_ref });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Gagal masuk.");
@@ -85,12 +97,13 @@ export function Login() {
           <h2 className="text-2xl font-bold">Masuk</h2>
           <p className="text-sm text-muted mt-1">Pilih peran, lalu koperasi Anda.</p>
 
-          <div className="grid grid-cols-2 gap-3 mt-6">
+          <div className="grid grid-cols-3 gap-2 mt-6">
             <RoleCard
               active={role === "pengurus"}
               onClick={() => {
                 setRole("pengurus");
                 setAgt(null);
+                setWaMember(null);
               }}
               icon="admin_panel_settings"
               title="Pengurus"
@@ -98,14 +111,28 @@ export function Login() {
             />
             <RoleCard
               active={role === "anggota"}
-              onClick={() => setRole("anggota")}
+              onClick={() => {
+                setRole("anggota");
+                setWaMember(null);
+              }}
               icon="person"
               title="Anggota"
               desc="Layanan mandiri"
             />
+            <RoleCard
+              active={role === "anggota_wa"}
+              onClick={() => {
+                setRole("anggota_wa");
+                setKop(null);
+                setAgt(null);
+              }}
+              icon="smartphone"
+              title="Anggota WA"
+              desc="Akun WhatsApp"
+            />
           </div>
 
-          {role && (
+          {(role === "pengurus" || role === "anggota") && (
             <div className="mt-5">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted">
                 Koperasi
@@ -174,6 +201,46 @@ export function Login() {
                       <>
                         <p className="font-medium text-ink truncate">{a.nama}</p>
                         <p className="text-xs text-muted">{a.anggota_ref}</p>
+                      </>
+                    )}
+                  />
+                </>
+              )}
+            </div>
+          )}
+
+          {role === "anggota_wa" && (
+            <div className="mt-5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Anggota (akun WhatsApp)
+              </label>
+              {waMember ? (
+                <SelectedRow
+                  icon="smartphone"
+                  title={waMember.nama}
+                  sub={waMember.no_anggota}
+                  onClear={() => setWaMember(null)}
+                />
+              ) : (
+                <>
+                  <SearchInput
+                    value={waQ}
+                    onChange={setWaQ}
+                    placeholder="Cari nama / no. anggota / no. HP…"
+                    className="mt-1.5"
+                  />
+                  <PickList
+                    loading={waList.isLoading}
+                    items={waList.data?.data ?? []}
+                    keyOf={(w) => w.no_anggota}
+                    onPick={setWaMember}
+                    render={(w) => (
+                      <>
+                        <p className="font-medium text-ink truncate">{w.nama}</p>
+                        <p className="text-xs text-muted">
+                          {w.no_anggota}
+                          {w.phone ? ` · ${w.phone}` : ""}
+                        </p>
                       </>
                     )}
                   />

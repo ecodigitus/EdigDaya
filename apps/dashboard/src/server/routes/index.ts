@@ -7,6 +7,7 @@ import "./health";
 import "./auth";
 import "./pengurus";
 import "./anggota";
+import "./anggotawa";
 import "./nasional";
 import "./akun";
 import "./preorder";

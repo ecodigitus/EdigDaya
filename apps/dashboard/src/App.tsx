@@ -6,6 +6,7 @@ import { FullscreenLoader } from "./components/ui";
 import { AppShell } from "./components/AppShell";
 import { Login } from "./pages/Login";
 import { Nasional } from "./pages/Nasional";
+import { WaBeranda } from "./pages/wa/Beranda";
 
 import { PengurusOverview } from "./pages/pengurus/Overview";
 import { PengurusAnggota } from "./pages/pengurus/Anggota";
@@ -59,6 +60,11 @@ function AuthedApp({ role }: { role: Role }) {
           <Route path="/pengajuan" element={<PengurusPengajuan />} />
           <Route path="/rat" element={<PengurusRAT />} />
           <Route path="/profil" element={<PengurusProfilKoperasi />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      ) : role === "anggota_wa" ? (
+        <Routes>
+          <Route path="/" element={<WaBeranda />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       ) : (

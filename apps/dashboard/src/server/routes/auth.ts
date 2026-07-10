@@ -10,7 +10,8 @@
 import { route } from "../router";
 import { json, err, readJson } from "../http";
 import { db } from "../db";
-import { shared } from "../tables";
+import { sdb } from "../sdb";
+import { shared, team } from "../tables";
 import { signSession, SESSION_TTL, type Session } from "../auth";
 import { pagination, searchText, likePattern } from "../validate";
 
@@ -20,7 +21,7 @@ function expSec(): number {
 
 // POST /api/auth/login  { role: "pengurus", koperasi_ref } | { role: "anggota", anggota_ref }
 route("POST", "/api/auth/login", async ({ req }) => {
-  const body = await readJson<{ role?: string; koperasi_ref?: string; anggota_ref?: string }>(req);
+  const body = await readJson<{ role?: string; koperasi_ref?: string; anggota_ref?: string; no_anggota?: string }>(req);
   if (!body) return err(400, "Body permintaan tidak valid.");
 
   if (body.role === "pengurus") {
@@ -59,6 +60,25 @@ route("POST", "/api/auth/login", async ({ req }) => {
     return json({ token: await signSession(session), session });
   }
 
+  if (body.role === "anggota_wa") {
+    const no = String(body.no_anggota ?? "").trim();
+    if (!no) return err(400, "no_anggota wajib diisi.");
+    // Validasi identitas ke edig_dev_members (tabel tim). Konsisten dgn model bypass
+    // Fase A (tanpa kata sandi) — scope no_anggota di-bake ke token bertanda-tangan.
+    const [m] = await sdb`
+      SELECT no_anggota, nama, koperasi_ref FROM ${sdb(team("members"))} WHERE no_anggota = ${no} LIMIT 1`;
+    if (!m) return err(404, "Anggota digital (WA) tidak ditemukan.");
+    const session: Session = {
+      sub: `wa:${no}`,
+      role: "anggota_wa",
+      koperasi_ref: m.koperasi_ref ?? "",
+      no_anggota: no,
+      nama: m.nama ?? no,
+      exp: expSec(),
+    };
+    return json({ token: await signSession(session), session });
+  }
+
   return err(400, "Peran tidak valid.");
 });
 
@@ -92,5 +112,19 @@ route("GET", "/api/auth/anggota", async ({ url }) => {
     SELECT anggota_ref, nama, status_keanggotaan
     FROM ${db(shared("anggota_koperasi"))} ${where}
     ORDER BY nama ASC LIMIT ${limit}`;
+  return json({ data });
+});
+
+// GET /api/auth/anggota-wa?q= — picker anggota digital (edig_dev_members) untuk login WA.
+route("GET", "/api/auth/anggota-wa", async ({ url }) => {
+  const q = searchText(url.searchParams.get("q"));
+  const { limit } = pagination(url, 20, 50);
+  const where = q
+    ? sdb`WHERE nama ILIKE ${likePattern(q)} OR no_anggota ILIKE ${likePattern(q)} OR phone ILIKE ${likePattern(q)}`
+    : sdb``;
+  const data = await sdb`
+    SELECT no_anggota, nama, phone
+    FROM ${sdb(team("members"))} ${where}
+    ORDER BY updated_at DESC NULLS LAST LIMIT ${limit}`;
   return json({ data });
 });

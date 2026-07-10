@@ -1,20 +1,22 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, setToken, setUnauthorizedHandler } from "./api";
 
-export type Role = "pengurus" | "anggota";
+export type Role = "pengurus" | "anggota" | "anggota_wa";
 
 export type Session = {
   sub: string;
   role: Role;
   koperasi_ref: string;
   anggota_ref?: string;
+  no_anggota?: string;
   nama?: string;
   exp: number;
 };
 
 export type LoginPayload =
   | { role: "pengurus"; koperasi_ref: string }
-  | { role: "anggota"; anggota_ref: string };
+  | { role: "anggota"; anggota_ref: string }
+  | { role: "anggota_wa"; no_anggota: string };
 
 type AuthCtx = {
   session: Session | null;
