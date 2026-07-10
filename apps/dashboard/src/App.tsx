@@ -69,7 +69,12 @@ function AuthedApp({ role }: { role: Role }) {
         <Routes>
           <Route path="/" element={<WaBeranda />} />
           <Route path="/simpanan" element={<WaSimpanan />} />
+          <Route path="/produk" element={<AnggotaProduk />} />
           <Route path="/referral" element={<WaReferral />} />
+          <Route path="/pre-order" element={<AnggotaPreOrder />} />
+          <Route path="/pengumuman" element={<AnggotaPengumuman />} />
+          <Route path="/transparansi" element={<AnggotaTransparansi />} />
+          <Route path="/pengajuan" element={<AnggotaPengajuan />} />
           <Route path="/profil" element={<WaProfil />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -34,11 +34,18 @@ const ANGGOTA_NAV: NavItem[] = [
   { to: "/profil", label: "Profil", icon: "person" },
 ];
 
-// Anggota yang login via akun WhatsApp (data dari edig_dev_members).
+// Anggota yang login via akun WhatsApp — menu disamakan dengan portal anggota nasional.
+// Beranda/Simpanan/Referral/Profil pakai data WA (edig_dev_members); Produk/Pre-Order/
+// Pengumuman/Transparansi/Pembiayaan pakai halaman nasional (konten koperasi).
 const WA_NAV: NavItem[] = [
   { to: "/", label: "Beranda", icon: "home", end: true },
   { to: "/simpanan", label: "Simpanan", icon: "savings" },
+  { to: "/produk", label: "Produk", icon: "storefront" },
   { to: "/referral", label: "Referral", icon: "campaign" },
+  { to: "/pre-order", label: "Pre-Order", icon: "shopping_cart" },
+  { to: "/pengumuman", label: "Pengumuman", icon: "notifications_active" },
+  { to: "/transparansi", label: "Transparansi", icon: "gavel" },
+  { to: "/pengajuan", label: "Pembiayaan", icon: "request_quote" },
   { to: "/profil", label: "Profil", icon: "person" },
 ];
 

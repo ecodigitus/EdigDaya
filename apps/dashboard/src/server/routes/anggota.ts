@@ -9,7 +9,9 @@ import { shared } from "../tables";
 import { anggotaScope } from "../scope";
 import { pagination, searchText, likePattern, optionalOneOf } from "../validate";
 
-const ANGGOTA = ["anggota"] as const;
+// anggota_wa (login via WhatsApp) ikut boleh — endpoint konten koperasi di-scope
+// via koperasi_ref di token; data pribadi nasional kosong bila tak match (aman).
+const ANGGOTA = ["anggota", "anggota_wa"] as const;
 
 // GET /api/anggota/overview — home: profile + savings summary + recent history.
 route(
@@ -140,8 +142,9 @@ route(
     const [a] = await db`
       SELECT nik FROM ${db(shared("anggota_koperasi"))}
       WHERE anggota_ref = ${anggota_ref} AND koperasi_ref = ${koperasi_ref} LIMIT 1`;
-    if (!a) return err(404, "Anggota tidak ditemukan.");
-    if (!a.nik) return json({ data: [] });
+    // Anggota WA tak punya baris nasional -> kembalikan kosong (bukan 404) agar
+    // halaman Pembiayaan tetap tampil rapi ("belum ada pengajuan").
+    if (!a || !a.nik) return json({ data: [] });
     const data = await db`
       SELECT pengajuan_pembiayaan_ref, status_permohonan, nominal_permohonan::float8 AS nominal,
              tenor, tujuan_permohonan, dibuat_pada

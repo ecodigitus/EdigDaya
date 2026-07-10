@@ -22,7 +22,7 @@ route(
       FROM ${sdb(PRE_ORDERS)} WHERE anggota_ref = ${anggota_ref} ORDER BY created_at DESC LIMIT 100`;
     return json({ enabled: true, data });
   },
-  ["anggota"],
+  ["anggota", "anggota_wa"],
 );
 
 // POST /api/anggota/pre-order — create a pre-order (product from catalog or free text).
@@ -44,7 +44,7 @@ route(
       RETURNING id, produk, qty_num, catatan, status, created_at`;
     return json({ ok: true, data: row });
   },
-  ["anggota"],
+  ["anggota", "anggota_wa"],
 );
 
 // GET /api/pengurus/pre-order — queue for this koperasi.

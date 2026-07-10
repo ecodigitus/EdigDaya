@@ -72,7 +72,7 @@ route(
       ORDER BY created_at DESC LIMIT 100`;
     return json({ data });
   },
-  ["anggota"],
+  ["anggota", "anggota_wa"],
 );
 
 // ---- Transparansi ----
@@ -92,7 +92,7 @@ route(
       RETURNING id, kategori, isi, anonim, status, created_at`;
     return json({ ok: true, data: row });
   },
-  ["anggota"],
+  ["anggota", "anggota_wa"],
 );
 
 route(
@@ -105,7 +105,7 @@ route(
       FROM ${sdb(TRANSPARANSI)} WHERE anggota_ref = ${anggota_ref} ORDER BY created_at DESC LIMIT 100`;
     return json({ data });
   },
-  ["anggota"],
+  ["anggota", "anggota_wa"],
 );
 
 route(

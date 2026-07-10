@@ -19,6 +19,10 @@ function expSec(): number {
   return Math.floor(Date.now() / 1000) + SESSION_TTL;
 }
 
+// Koperasi default untuk anggota WA yang belum punya koperasi_ref (daftar via bot
+// murni). Dipakai agar halaman konten koperasi (produk/pengumuman/dll) ada isinya.
+const WA_DEFAULT_KOPERASI = "KOP-78408FE6FFA4";
+
 // POST /api/auth/login  { role: "pengurus", koperasi_ref } | { role: "anggota", anggota_ref }
 route("POST", "/api/auth/login", async ({ req }) => {
   const body = await readJson<{ role?: string; koperasi_ref?: string; anggota_ref?: string; no_anggota?: string }>(req);
@@ -71,7 +75,11 @@ route("POST", "/api/auth/login", async ({ req }) => {
     const session: Session = {
       sub: `wa:${no}`,
       role: "anggota_wa",
-      koperasi_ref: m.koperasi_ref ?? "",
+      // anggota_ref = no_anggota agar anggotaScope() lolos saat memakai ulang
+      // halaman/endpoint anggota nasional (query ke tabel nasional cukup kosong
+      // bila tak match — bukan error). koperasi_ref default bila belum ada.
+      koperasi_ref: m.koperasi_ref || WA_DEFAULT_KOPERASI,
+      anggota_ref: no,
       no_anggota: no,
       nama: m.nama ?? no,
       exp: expSec(),
