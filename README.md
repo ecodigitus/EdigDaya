@@ -42,8 +42,8 @@ bun run start:dashboard
 
 ## Deploy
 
-Kedua app di satu GCP VM. Bot lihat [apps/bot/DEPLOY.md](apps/bot/DEPLOY.md);
-dashboard sebagai systemd service kedua di belakang Caddy (HTTPS). Ringkasan di
+Kedua app di satu GCE VM — runbook lengkap: **[DEPLOY.md](DEPLOY.md)**
+(bot systemd + dashboard systemd + Caddy HTTPS via nip.io). Peta di
 [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Keamanan (OWASP)

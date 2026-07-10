@@ -1,5 +1,9 @@
 # Deploy Bot 24/7 di Google Cloud (Compute Engine VM)
 
+> ⚠️ **USANG / hanya rujukan bot-only.** Untuk deploy monorepo EdigDaya (bot + dashboard
+> di satu VM, path `apps/bot`, + Caddy HTTPS), pakai **[`../../DEPLOY.md`](../../DEPLOY.md)**
+> di root repo. Dokumen ini masih memakai path & repo lama (`edigkop`, branch `ikhsan-dev`).
+
 Panduan menjalankan bot WhatsApp **online terus** (tanpa laptop nyala) di VM GCP,
 memanfaatkan credit $300. Cocok untuk demo/pilot koperasi.
 
