@@ -12,7 +12,7 @@
 import { koperasi } from './business';
 import { rupiah } from './format';
 import { creditSimpanan } from './simpanan';
-import { persistMember, type Member } from './members';
+import { persistMember, hitungSkorKeterlibatan, type Member } from './members';
 
 type CampaignKind = 'nudge' | 'vote';
 type Option = { key: string; label: string };
@@ -113,7 +113,7 @@ export function startVoteFor(jid: string): string {
   return ballotText(c);
 }
 
-function handleVoteReply(jid: string, t: string, c: Campaign): string {
+function handleVoteReply(jid: string, t: string, c: Campaign, m: Member): string {
   const opt = c.options.find((o) => o.key === t || o.label.toLowerCase() === t);
   if (!opt) {
     const opts = c.options.map((o) => `${o.key})  ${o.label}`).join('\n');
@@ -122,7 +122,15 @@ function handleVoteReply(jid: string, t: string, c: Campaign): string {
   c.tally[opt.key] = (c.tally[opt.key] ?? 0) + 1;
   c.responded.add(jid);
   pending.delete(jid);
-  return `✅ *Suaramu tercatat: ${opt.label}*\n\n${resultText(c)}`;
+  // Partisipasi voting = keaktifan → +poin, lalu skor dihitung ulang & disimpan.
+  const before = hitungSkorKeterlibatan(m);
+  m.poin += 30;
+  persistMember(m); // recompute skor keterlibatan + write-through ke DB
+  return (
+    `✅ *Suaramu tercatat: ${opt.label}*\n` +
+    `⭐ +30 poin (total ${m.poin.toLocaleString('id-ID')}) · 📊 Skor: ${before} → *${m.skorKeterlibatan}*/100\n\n` +
+    `${resultText(c)}`
+  );
 }
 
 /* ============================== NUDGE ============================== */
@@ -159,11 +167,10 @@ function handleNudgeReply(jid: string, t: string, c: Campaign, m: Member): strin
   if (yes.some((w) => t === w)) {
     c.responded.add(jid);
     pending.delete(jid);
-    const before = m.skorKeterlibatan;
+    const before = hitungSkorKeterlibatan(m);
     creditSimpanan(m, 'wajib', koperasi.simpanan.wajib); // beneran menambah saldo (bukan sekadar poin)
     m.poin += 50;
-    m.skorKeterlibatan = Math.min(100, m.skorKeterlibatan + 7);
-    persistMember(m); // write-through saldo, poin & skor baru ke Supabase
+    persistMember(m); // write-through saldo & poin + hitung ulang skor keterlibatan ke DB
     return (
       `✅ Siap, *${m.nama}*! Pembayaran *simpanan wajib ${rupiah(koperasi.simpanan.wajib)}* tercatat 🎉\n\n` +
       `💰 Total simpanan wajib kamu kini: *${rupiah(m.simpananWajib)}*\n` +
@@ -203,7 +210,7 @@ export function handleCampaignReply(jid: string, text: string, m: Member): strin
     return null; // biar jatuh ke menu/AI biasa (mis. "menu")
   }
 
-  return c.kind === 'vote' ? handleVoteReply(jid, t, c) : handleNudgeReply(jid, t, c, m);
+  return c.kind === 'vote' ? handleVoteReply(jid, t, c, m) : handleNudgeReply(jid, t, c, m);
 }
 
 /** Kata kunci untuk MEMULAI campaign dari sisi anggota (demo satu HP). */

@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { config, aiEnabled } from './config';
 import { koperasi, koperasiContext } from './business';
 import { rupiah } from './format';
-import { totalSimpanan, type Member } from './members';
+import { totalSimpanan, hitungSkorKeterlibatan, type Member } from './members';
 import type { ChatMessage } from './session';
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -32,7 +32,7 @@ Data anggota yang sedang chat (pakai untuk menjawab pertanyaan personal):
 - Nama: ${m.nama} (${m.noAnggota}), anggota sejak ${m.sejak}
 - Simpanan: pokok ${rupiah(m.simpananPokok)}, wajib ${rupiah(m.simpananWajib)}, sukarela ${rupiah(m.simpananSukarela)}, total ${rupiah(totalSimpanan(m))}
 - Estimasi SHU berjalan: ${rupiah(m.estimasiSHU)}
-- Poin ${m.poin}, lencana "${m.lencana}", skor keterlibatan ${m.skorKeterlibatan}/100
+- Poin ${m.poin}, lencana "${m.lencana}", skor keterlibatan ${hitungSkorKeterlibatan(m)}/100
 - Pinjaman: ${pinjaman}
 
 Aturan menjawab:

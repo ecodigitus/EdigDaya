@@ -6,7 +6,8 @@
  * PRODUKSI: ganti fungsi getMember() dengan query ke database anggota nyata
  * (mis. SIMKOPDES) berdasarkan nomor terverifikasi.
  */
-import { makeCode, registerCode } from './referral';
+import { makeCode, registerCode, stats } from './referral';
+import { koperasi } from './business';
 import { dbEnabled, fetchAll, upsert, selectWhere, unlinkPhone } from './db';
 
 /**
@@ -245,6 +246,8 @@ export async function hydrateMembers(): Promise<number> {
 
 /** Write-through profil anggota ke Supabase (fire-and-forget; no-op bila DB nonaktif). */
 export function persistMember(m: Member, phone?: string): void {
+  // Selalu hitung ulang skor keterlibatan dari state terbaru → sinkron memori & DB.
+  m.skorKeterlibatan = hitungSkorKeterlibatan(m);
   if (!dbEnabled) return;
   const row = memberToRow(m, phone);
   if (phone) {
@@ -334,6 +337,28 @@ export function getMember(jid: string): Member {
 /** Total simpanan = pokok + wajib + sukarela. */
 export function totalSimpanan(m: Member): number {
   return m.simpananPokok + m.simpananWajib + m.simpananSukarela;
+}
+
+/**
+ * SKOR KETERLIBATAN (0–100) — DIHITUNG dari keaktifan anggota (bukan angka statis).
+ * Komponen (total maks 100):
+ *   • Simpanan pokok lunas ............ +15
+ *   • Rutin simpanan wajib ............ +3 / Rp200rb (maks 25)
+ *   • Punya simpanan sukarela ......... +10
+ *   • Poin aktivitas (setor/nudge/vote) +1 / 200 poin (maks 25)
+ *   • Ajak teman (referral) ........... +5 / orang (maks 15)
+ *   • Pakai layanan pinjaman .......... +10
+ * Dipakai untuk tampilan WA & disimpan ke DB (dihitung ulang tiap persistMember).
+ */
+export function hitungSkorKeterlibatan(m: Member): number {
+  let s = 0;
+  if (m.simpananPokok >= koperasi.simpanan.pokok) s += 15;
+  s += Math.min(25, Math.floor(m.simpananWajib / 200_000) * 3);
+  if (m.simpananSukarela > 0) s += 10;
+  s += Math.min(25, Math.floor(m.poin / 200));
+  s += Math.min(15, stats(m.kodeReferral).ajakan * 5);
+  if (m.pinjaman) s += 10;
+  return Math.min(100, s);
 }
 
 /**

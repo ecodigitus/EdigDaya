@@ -1,6 +1,6 @@
 import { koperasi, mainMenu } from './business';
 import { rupiah } from './format';
-import { totalSimpanan, type Member } from './members';
+import { totalSimpanan, hitungSkorKeterlibatan, type Member } from './members';
 import { stats } from './referral';
 import { pokokLunas } from './simpanan';
 
@@ -84,7 +84,7 @@ export function matchMenu(raw: string, m: Member): string | null {
       `🎯 *Keterlibatan ${m.nama}*\n\n` +
       `⭐ Poin: *${m.poin.toLocaleString('id-ID')}*\n` +
       `🏅 Lencana: ${m.lencana}\n` +
-      `📊 Skor Keterlibatan: *${m.skorKeterlibatan}/100*\n\n` +
+      `📊 Skor Keterlibatan: *${hitungSkorKeterlibatan(m)}/100*\n\n` +
       `*Misi minggu ini:*\n` +
       `☐ Setor simpanan wajib → +50 poin\n` +
       `☐ Hadir kegiatan koperasi → +100 poin\n` +
@@ -149,7 +149,7 @@ function informasiSaya(m: Member): string {
     `• Peran: ${peran}\n` +
     `• Status: *Aktif* ✅\n` +
     `• Lencana: ${m.lencana}\n` +
-    `• Skor keterlibatan: ${m.skorKeterlibatan}/100\n` +
+    `• Skor keterlibatan: ${hitungSkorKeterlibatan(m)}/100\n` +
     `• Kode referral: *${m.kodeReferral}*\n\n` +
     `*— Ringkasan —*\n` +
     `• Total simpanan: *${rupiah(totalSimpanan(m))}*\n` +
