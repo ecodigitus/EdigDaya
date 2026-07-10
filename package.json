@@ -1,0 +1,19 @@
+{
+  "name": "edigdaya",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "engines": { "bun": ">=1.2" },
+  "scripts": {
+    "dev:bot": "bun --filter edig-bot dev",
+    "start:bot": "bun --filter edig-bot start",
+    "dev:dashboard": "bun --filter edig-dashboard dev",
+    "build:dashboard": "bun --filter edig-dashboard build",
+    "start:dashboard": "bun --filter edig-dashboard start",
+    "typecheck": "bun --filter '*' typecheck"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,29 @@
+# === Dependencies ===
+node_modules/
+
+# === Build output ===
+dist/
+out/
+*.tgz
+
+# === Secrets — JANGAN pernah di-commit (OWASP A05) ===
+.env
+.env.*
+!.env.example
+# WhatsApp auth/session (setara token login)
+auth/
+# Vertex AI service-account JSON
+*-sa.json
+
+# === Logs & cache ===
+*.log
+logs/
+coverage/
+*.lcov
+*.tsbuildinfo
+.cache/
+
+# === OS / editor junk ===
+.DS_Store
+Thumbs.db
+.idea/
