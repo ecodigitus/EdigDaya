@@ -10,6 +10,7 @@ import { Nasional } from "./pages/Nasional";
 import { PengurusOverview } from "./pages/pengurus/Overview";
 import { PengurusAnggota } from "./pages/pengurus/Anggota";
 import { PengurusAnggotaDetail } from "./pages/pengurus/AnggotaDetail";
+import { PengurusAnggotaDigital } from "./pages/pengurus/AnggotaDigital";
 import { PengurusSimpanan } from "./pages/pengurus/Simpanan";
 import { PengurusProduk } from "./pages/pengurus/Produk";
 import { PengurusTransaksi } from "./pages/pengurus/Transaksi";
@@ -45,6 +46,7 @@ function AuthedApp({ role }: { role: Role }) {
         <Routes>
           <Route path="/" element={<PengurusOverview />} />
           <Route path="/anggota" element={<PengurusAnggota />} />
+          <Route path="/anggota-digital" element={<PengurusAnggotaDigital />} />
           <Route path="/anggota/:ref" element={<PengurusAnggotaDetail />} />
           <Route path="/simpanan" element={<PengurusSimpanan />} />
           <Route path="/produk" element={<PengurusProduk />} />

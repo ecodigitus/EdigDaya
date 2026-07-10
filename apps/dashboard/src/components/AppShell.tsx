@@ -8,6 +8,7 @@ type NavItem = { to: string; label: string; icon: string; end?: boolean };
 const PENGURUS_NAV: NavItem[] = [
   { to: "/", label: "Ringkasan", icon: "dashboard", end: true },
   { to: "/anggota", label: "Anggota", icon: "group" },
+  { to: "/anggota-digital", label: "Anggota Digital", icon: "smartphone" },
   { to: "/simpanan", label: "Simpanan", icon: "savings" },
   { to: "/produk", label: "Produk", icon: "inventory_2" },
   { to: "/transaksi", label: "Transaksi", icon: "receipt_long" },

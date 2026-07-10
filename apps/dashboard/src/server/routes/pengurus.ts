@@ -6,7 +6,7 @@
 import { route } from "../router";
 import { json, err } from "../http";
 import { db } from "../db";
-import { shared } from "../tables";
+import { shared, team } from "../tables";
 import { koperasiScope } from "../scope";
 import { pagination, searchText, likePattern, oneOf, optionalOneOf } from "../validate";
 
@@ -126,6 +126,37 @@ route(
       WHERE anggota_ref = ${ref} AND koperasi_ref = ${kop}
       ORDER BY dibayar_pada DESC NULLS LAST LIMIT 50`;
     return json({ anggota, simpanan: { byJenis, riwayat } });
+  },
+  PENGURUS,
+);
+
+// GET /api/pengurus/anggota-digital — anggota berakun digital / daftar via WA bot (edig_dev_members).
+// Baris hasil WA belum punya koperasi_ref (bot single-tenant) → sertakan juga yang NULL agar
+// data uji WA ikut tampil. Aman untuk satu koperasi demo; tetap scoped ke koperasi sesi + NULL.
+route(
+  "GET",
+  "/api/pengurus/anggota-digital",
+  async ({ session, url }) => {
+    const kop = koperasiScope(session);
+    const q = searchText(url.searchParams.get("q"));
+    const { limit, offset, page } = pagination(url, 20, 100);
+    const filters = () => db`
+      WHERE (koperasi_ref = ${kop} OR koperasi_ref IS NULL)
+        AND (${q}::text IS NULL
+             OR nama ILIKE ${q ? likePattern(q) : null}
+             OR no_anggota ILIKE ${q ? likePattern(q) : null}
+             OR phone ILIKE ${q ? likePattern(q) : null})`;
+    const [count] = await db`
+      SELECT count(*)::int AS total FROM ${db(team("members"))} ${filters()}`;
+    const data = await db`
+      SELECT no_anggota, nama, phone, role, kode_referral,
+             coalesce(poin, 0)::int AS poin,
+             coalesce(estimasi_shu, 0)::float8 AS estimasi_shu,
+             (coalesce(simpanan_pokok, 0) + coalesce(simpanan_wajib, 0) + coalesce(simpanan_sukarela, 0))::float8 AS total_simpanan,
+             diaktifkan_pada, updated_at
+      FROM ${db(team("members"))} ${filters()}
+      ORDER BY updated_at DESC NULLS LAST LIMIT ${limit} OFFSET ${offset}`;
+    return json({ data, page, limit, total: count.total });
   },
   PENGURUS,
 );
