@@ -7,6 +7,8 @@ import { AppShell } from "./components/AppShell";
 import { Login } from "./pages/Login";
 import { Nasional } from "./pages/Nasional";
 import { WaBeranda } from "./pages/wa/Beranda";
+import { WaSimpanan } from "./pages/wa/Simpanan";
+import { WaReferral } from "./pages/wa/Referral";
 
 import { PengurusOverview } from "./pages/pengurus/Overview";
 import { PengurusAnggota } from "./pages/pengurus/Anggota";
@@ -65,6 +67,8 @@ function AuthedApp({ role }: { role: Role }) {
       ) : role === "anggota_wa" ? (
         <Routes>
           <Route path="/" element={<WaBeranda />} />
+          <Route path="/simpanan" element={<WaSimpanan />} />
+          <Route path="/referral" element={<WaReferral />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       ) : (

@@ -35,7 +35,11 @@ const ANGGOTA_NAV: NavItem[] = [
 ];
 
 // Anggota yang login via akun WhatsApp (data dari edig_dev_members).
-const WA_NAV: NavItem[] = [{ to: "/", label: "Beranda", icon: "home", end: true }];
+const WA_NAV: NavItem[] = [
+  { to: "/", label: "Beranda", icon: "home", end: true },
+  { to: "/simpanan", label: "Simpanan", icon: "savings" },
+  { to: "/referral", label: "Referral", icon: "campaign" },
+];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { session, logout } = useAuth();
