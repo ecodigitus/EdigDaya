@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * Two brand skins ported from the Stitch designs:
+ *  - default (admin / "Rural Prosperity"): navy + emerald
+ *  - [data-skin="member"] ("CoopModern"): ocean blue + green
+ * Utilities like bg-primary / text-ink / border-line read these vars, so the
+ * whole UI re-skins by toggling data-skin on the shell root.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-primary: #131b2e;
+  --color-primary-fg: #ffffff;
+  --color-accent: #006c49;
+  --color-accent-fg: #ffffff;
+  --color-bg: #f5f6fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef1f8;
+  --color-ink: #0b1c30;
+  --color-muted: #5b6472;
+  --color-line: #e3e6ef;
+  --color-ok: #137333;
+  --color-ok-bg: #e6f4ea;
+  --color-warn: #8a5a00;
+  --color-warn-bg: #fdf0d0;
+  --color-danger: #ba1a1a;
+  --color-danger-bg: #ffdad6;
+  --color-info: #0047ab;
+  --color-info-bg: #e6efff;
+}
+
+[data-skin="member"] {
+  --color-primary: #00327d;
+  --color-primary-fg: #ffffff;
+  --color-accent: #006e1c;
+  --color-accent-fg: #ffffff;
+  --color-bg: #f7f9ff;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef2ff;
+  --color-ink: #111c2d;
+  --color-muted: #434653;
+  --color-line: #dbe1f2;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    margin: 0;
+    min-height: 100vh;
+  }
+  * {
+    border-color: var(--color-line);
+  }
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    user-select: none;
+    line-height: 1;
+  }
+}
+
+@media (prefers-reduced-motion) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

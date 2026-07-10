@@ -1,0 +1,31 @@
+{
+  "name": "edig-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/index.ts",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "build": "bun run build.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "bun-plugin-tailwind": "^0.1.2",
+    "qrcode-generator": "^2.0.4",
+    "react": "^19",
+    "react-dom": "^19",
+    "react-router-dom": "^7.18.1",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/qrcode-generator": "^1.0.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  },
+  "module": "src/index.ts",
+  "peerDependencies": {
+    "typescript": "^6"
+  }
+}

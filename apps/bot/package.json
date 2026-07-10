@@ -1,9 +1,9 @@
 {
-  "name": "wa-cs-chatbot",
+  "name": "edig-bot",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MVP chatbot Customer Service WhatsApp (Baileys + Claude, hybrid menu + AI)",
+  "description": "EdigDaya WhatsApp CS bot (Baileys + AI: Vertex/Groq/Claude/Gemini, hybrid menu)",
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch src/index.ts",

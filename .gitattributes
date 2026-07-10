@@ -1,0 +1,10 @@
+# Normalisasi line-ending: simpan LF di repo (deploy target Linux).
+* text=auto eol=lf
+
+# Binary — jangan diutak-atik.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.svg text
+*.ico binary
+*.lock -diff
