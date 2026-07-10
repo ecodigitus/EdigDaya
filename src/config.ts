@@ -48,10 +48,21 @@ export const config = {
     maxTokens: num('GEMINI_MAX_TOKENS', 1024),
   },
   supabase: {
-    // DB bersama bot + dashboard. KOSONG = bot pakai data dummy in-memory (fallback).
+    // (Legacy) DB Supabase — masih dipakai dashboard web (belum dimigrasi).
     url: process.env.SUPABASE_URL?.trim() ?? '',
-    // SECRET server-side (bypass RLS). Hanya di .env bot, tak pernah di frontend.
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? '',
+  },
+  cloudsql: {
+    // DB BOT di Google Cloud SQL (PostgreSQL). Menggantikan Supabase untuk bot.
+    // KOSONG = bot pakai data dummy in-memory (fallback aman). Password tak di-trim.
+    host: process.env.CLOUDSQL_HOST?.trim() ?? '',
+    port: num('CLOUDSQL_PORT', 5432),
+    database: process.env.CLOUDSQL_DB?.trim() ?? '',
+    username: process.env.CLOUDSQL_USER?.trim() ?? '',
+    password: process.env.CLOUDSQL_PASSWORD ?? '',
+    // Prefix nama tabel tim (mis. "edig_dev_"). Kosong = tanpa prefix.
+    // HARUS sama dengan nama tabel di DB (lihat cloudsql/schema.sql).
+    tablePrefix: process.env.DB_TABLE_PREFIX?.trim() ?? '',
   },
   simkopdes: {
     // Endpoint API pendaftaran SIMKOPDES. KOSONG = pakai adapter dummy (in-memory).
