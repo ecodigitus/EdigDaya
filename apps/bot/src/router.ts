@@ -1,5 +1,5 @@
 import { matchMenu } from './menu';
-import { generateReply } from './ai';
+import { generateReply, matchModelSwitch } from './ai';
 import { getHistory, record, inAiMode, setAiMode } from './session';
 import { getMember, isMember, forgetMember, type Member } from './members';
 import { handleProspect } from './onboarding';
@@ -117,6 +117,11 @@ export async function route(jid: string, text: string): Promise<string> {
       `Ketik *mulai* untuk lihat welcome & alur aktivasi dari awal. 🙌`
     );
   }
+
+  // 0b) Command khusus (tanpa menu): ganti provider AI saat runtime.
+  //     Dicek awal agar jalan kapan pun. Mis. "ganti model groq" / "pakai vertex".
+  const modelSwitch = matchModelSwitch(text);
+  if (modelSwitch !== null) return modelSwitch;
 
   const member = isMember(jid) ? getMember(jid) : null;
 
