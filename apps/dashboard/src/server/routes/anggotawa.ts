@@ -22,7 +22,7 @@ route(
   async ({ session }) => {
     const no = waScope(session);
     const [m] = await sdb`
-      SELECT no_anggota, nama, phone, role, sejak, kode_referral, lencana,
+      SELECT no_anggota, nama, phone, role, sejak, kode_referral, lencana, pinjaman,
              coalesce(poin, 0)::int AS poin,
              coalesce(estimasi_shu, 0)::float8 AS estimasi_shu,
              coalesce(skor_keterlibatan, 0)::int AS skor_keterlibatan,

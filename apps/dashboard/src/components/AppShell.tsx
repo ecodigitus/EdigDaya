@@ -46,6 +46,7 @@ const WA_NAV: NavItem[] = [
   { to: "/pengumuman", label: "Pengumuman", icon: "notifications_active" },
   { to: "/transparansi", label: "Transparansi", icon: "gavel" },
   { to: "/pengajuan", label: "Pembiayaan", icon: "request_quote" },
+  { to: "/pinjaman", label: "Pinjaman", icon: "account_balance" },
   { to: "/profil", label: "Profil", icon: "person" },
 ];
 
