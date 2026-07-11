@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏠 EdigKop — Chatbot WhatsApp Koperasi Desa Merah Putih
+# 🏠 EdigDaya — Chatbot WhatsApp Koperasi Desa Merah Putih
 
 **Layanan koperasi desa lewat WhatsApp — dari aktivasi anggota, simpanan, SHU, pinjaman, e-RAT & voting, sampai pre-order barang. Cukup dari chat, tanpa aplikasi tambahan.**
 
@@ -41,7 +41,7 @@ Hybrid **menu + AI** · mendukung **suara (voice note)** & **foto KTP (OCR)** ·
 
 ## 🎯 Tentang Proyek
 
-**EdigKop** adalah chatbot **WhatsApp** untuk **Koperasi Desa/Kelurahan Merah Putih (KOPDES)**. Tujuannya sederhana: membawa seluruh layanan koperasi ke kanal yang **sudah dimiliki dan dipakai sehari-hari** oleh warga desa — WhatsApp — sehingga tidak perlu unduh aplikasi baru, tidak perlu datang ke kantor untuk hal-hal rutin, dan ramah untuk warga yang kurang melek teknologi.
+**EdigDaya** adalah chatbot **WhatsApp** untuk **Koperasi Desa/Kelurahan Merah Putih (KOPDES)**. Tujuannya sederhana: membawa seluruh layanan koperasi ke kanal yang **sudah dimiliki dan dipakai sehari-hari** oleh warga desa — WhatsApp — sehingga tidak perlu unduh aplikasi baru, tidak perlu datang ke kantor untuk hal-hal rutin, dan ramah untuk warga yang kurang melek teknologi.
 
 **Masalah yang diselesaikan:**
 
@@ -306,9 +306,9 @@ Fitur pembeda untuk **inklusi digital**: anggota yang enggan/kesulitan mengetik 
 **Prasyarat:** [Bun](https://bun.sh) `>=1.2` dan sebuah nomor WhatsApp untuk bot.
 
 ```bash
-# 1. Clone & masuk folder
-git clone https://github.com/ecodigitus/edigkop.git
-cd edigkop
+# 1. Clone monorepo & masuk folder bot
+git clone https://github.com/ecodigitus/EdigDaya.git
+cd EdigDaya/apps/bot
 
 # 2. Pasang dependencies
 bun install
@@ -374,7 +374,7 @@ Singkatnya: buat VM (`e2-small`, region Jakarta) → pasang Bun → `git clone` 
 ## 📂 Struktur Proyek
 
 ```
-edigkop/
+apps/bot/                      # Bot WhatsApp — bagian dari monorepo EdigDaya
 ├── src/                       # Kode bot (TypeScript, dijalankan Bun)
 │   ├── index.ts               # Entry point (start bot, hydrate data, cleanup sesi)
 │   ├── config.ts              # Konfigurasi terpusat dari .env (tanpa secret hardcoded)
@@ -396,7 +396,6 @@ edigkop/
 │   ├── members.ts / db.ts     # Data anggota & akses DB (Cloud SQL)
 │   ├── session.ts             # State percakapan per user + TTL
 │   └── ...                    # menu, format, logger, notifications, dll.
-├── dashboard/                 # Dashboard web (React + Vite + Supabase)
 ├── supabase/ · cloudsql/      # Skema & SQL database
 ├── scripts/                   # Skrip uji (test-gemini, test-vertex)
 ├── docs/screenshots/          # Tangkapan layar (dipakai README ini)

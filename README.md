@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏠 EdigKop — Chatbot WhatsApp Koperasi Desa Merah Putih
+# 🏠 EdigDaya — Chatbot WhatsApp Koperasi Desa Merah Putih
 
 **Layanan koperasi desa lewat WhatsApp — dari aktivasi anggota, simpanan, SHU, pinjaman, e-RAT & voting, sampai pre-order barang. Cukup dari chat, tanpa aplikasi tambahan.**
 
@@ -41,7 +41,7 @@ Hybrid **menu + AI** · mendukung **suara (voice note)** & **foto KTP (OCR)** ·
 
 ## 🎯 Tentang Proyek
 
-**EdigKop** adalah chatbot **WhatsApp** untuk **Koperasi Desa/Kelurahan Merah Putih (KOPDES)**. Tujuannya sederhana: membawa seluruh layanan koperasi ke kanal yang **sudah dimiliki dan dipakai sehari-hari** oleh warga desa — WhatsApp — sehingga tidak perlu unduh aplikasi baru, tidak perlu datang ke kantor untuk hal-hal rutin, dan ramah untuk warga yang kurang melek teknologi.
+**EdigDaya** adalah chatbot **WhatsApp** untuk **Koperasi Desa/Kelurahan Merah Putih (KOPDES)**. Tujuannya sederhana: membawa seluruh layanan koperasi ke kanal yang **sudah dimiliki dan dipakai sehari-hari** oleh warga desa — WhatsApp — sehingga tidak perlu unduh aplikasi baru, tidak perlu datang ke kantor untuk hal-hal rutin, dan ramah untuk warga yang kurang melek teknologi.
 
 **Masalah yang diselesaikan:**
 
@@ -93,9 +93,9 @@ Hybrid **menu + AI** · mendukung **suara (voice note)** & **foto KTP (OCR)** ·
                        │  referral) ▼                 │
                        │      Cloud SQL (Postgres)    │   ← fallback: data dummy in-memory
                        └─────────────┬───────────────┘
-                                     │  (Supabase, read)
+                                     │  
                                      ▼
-                          Dashboard Web (React + Vite)
+                          Dashboard Web (React + Bun)
 ```
 
 | Lapisan | Teknologi |
@@ -109,7 +109,7 @@ Hybrid **menu + AI** · mendukung **suara (voice note)** & **foto KTP (OCR)** ·
 | **Database (dashboard)** | Supabase |
 | **Data nasional** | DB panitia hackathon (**read-only**, untuk menu "Koperasi Global") |
 | **Backend aktivasi** | Adapter **SIMKOPDES** (dummy / API pemerintah) |
-| **Dashboard** | React + Vite + TypeScript |
+| **Dashboard** | React + **Bun** (satu proses: REST API + React SPA) + TypeScript |
 | **Utilitas** | pino (logging) · dotenv (config) · qrcode-terminal (QR login) |
 
 ---
@@ -305,26 +305,34 @@ Fitur pembeda untuk **inklusi digital**: anggota yang enggan/kesulitan mengetik 
 
 **Prasyarat:** [Bun](https://bun.sh) `>=1.2` dan sebuah nomor WhatsApp untuk bot.
 
+Repo ini adalah **monorepo** (Bun workspaces) berisi dua aplikasi: **bot** (`apps/bot`) & **dashboard** (`apps/dashboard`). Cukup `bun install` **sekali di root** untuk memasang keduanya.
+
 ```bash
 # 1. Clone & masuk folder
-git clone https://github.com/ecodigitus/edigkop.git
-cd edigkop
+git clone https://github.com/ecodigitus/EdigDaya.git
+cd EdigDaya
 
-# 2. Pasang dependencies
+# 2. Pasang dependencies (seluruh workspace)
 bun install
 
-# 3. Siapkan konfigurasi
-cp .env.example .env
-#   lalu isi .env seperlunya (lihat bagian Konfigurasi)
+# 3. Siapkan konfigurasi bot
+cp apps/bot/.env.example apps/bot/.env
+#   lalu isi apps/bot/.env seperlunya (lihat bagian Konfigurasi)
 
-# 4. Jalankan
-bun run dev      # mode development (auto-reload)
+# 4. Jalankan BOT (dari root repo)
+bun run dev:bot      # mode development (auto-reload)
 # atau
-bun start        # jalan sekali (produksi)
+bun run start:bot    # produksi (jalan sekali)
 
-# Cek tipe (opsional)
+# (opsional) Jalankan DASHBOARD web
+bun run dev:dashboard   # development
+#   produksi: bun run build:dashboard && bun run start:dashboard
+
+# Cek tipe seluruh workspace (opsional)
 bun run typecheck
 ```
+
+> Semua skrip di atas dijalankan **dari root repo**. Alternatif: `cd apps/bot` lalu `bun run dev` / `bun start` (skrip lokal per-app).
 
 **Login WhatsApp:** saat pertama dijalankan, sebuah **QR code** muncul di terminal → buka **WhatsApp → Perangkat Tertaut → Tautkan perangkat** → scan. Sesi tersimpan di folder `auth/` sehingga **tidak perlu scan ulang** saat restart.
 
@@ -359,52 +367,58 @@ Semua nilai sensitif diambil dari environment variable — **tidak ada secret di
 | `HISTORY_TURNS` / `SESSION_TTL_MINUTES` | `6` / `60` | Riwayat ke AI & umur sesi |
 | `LOG_LEVEL` / `BAILEYS_LOG_LEVEL` | `info` / `warn` | Level logging |
 
-> 🔐 **Jangan commit** `.env`, folder `auth/`, atau file service account (`*-sa.json`). Semua sudah masuk [`.gitignore`](apps/bot/.gitignore).
+> 🔐 **Jangan commit** `.env`, folder `auth/`, atau file service account (`*-sa.json`). Semua sudah masuk [`.gitignore`](.gitignore).
 
 ---
 
 ## 🌐 Deploy 24/7
 
-Untuk demo/pilot yang selalu online tanpa laptop menyala, jalankan di **Google Cloud Compute Engine (VM)** dengan `systemd` (auto-restart & nyala saat boot). Panduan lengkap ada di **[DEPLOY.md](apps/bot/DEPLOY.md)**.
+Untuk demo/pilot yang selalu online tanpa laptop menyala, jalankan di **Google Cloud Compute Engine (VM)** dengan `systemd` (auto-restart & nyala saat boot). Panduan lengkap — **bot + dashboard dalam satu VM** — ada di **[DEPLOY.md](DEPLOY.md)**.
 
-Singkatnya: buat VM (`e2-small`, region Jakarta) → pasang Bun → `git clone` + `bun install` → isi `.env` → scan QR sekali → daftarkan service `systemd`. Bot hanya melakukan **koneksi keluar** (WA/API/DB) sehingga **tidak perlu membuka port masuk**.
+Singkatnya: buat VM → pasang Bun → `git clone` + `bun install` → isi `apps/bot/.env` → scan QR sekali → daftarkan service `systemd`. **Bot** hanya melakukan **koneksi keluar** (WA/API/DB) sehingga tak perlu buka port; **dashboard** disajikan di belakang **Caddy (HTTPS)**.
 
 ---
 
 ## 📂 Struktur Proyek
 
 ```
-edigkop/
-├── src/                       # Kode bot (TypeScript, dijalankan Bun)
-│   ├── index.ts               # Entry point (start bot, hydrate data, cleanup sesi)
-│   ├── config.ts              # Konfigurasi terpusat dari .env (tanpa secret hardcoded)
-│   ├── whatsapp.ts            # Koneksi & event Baileys
-│   ├── router.ts              # Routing hybrid: menu → intent AI → chat
-│   ├── welcome.ts             # Welcome card ("mulai")
-│   ├── activation.ts          # Aktivasi (kilat / form 12 langkah)
-│   ├── ktp.ts                 # OCR KTP (Cloud Vision)
-│   ├── voice.ts               # Voice note → teks (Cloud Speech-to-Text)
-│   ├── intent.ts              # Deteksi maksud kalimat bebas
-│   ├── ai.ts / vertex.ts      # Integrasi AI (Groq/Claude/Gemini & Vertex)
-│   ├── simpanan.ts            # Setor & saldo simpanan
-│   ├── preorder.ts            # Pre-Order (form user + command admin)
-│   ├── laporan.ts             # Anggota Jaga Anggota (laporan)
-│   ├── pengumuman.ts          # Pengumuman
-│   ├── pengurus.ts            # Daftar & hubungi pengurus
-│   ├── referral.ts            # Program referral "Gotong Royong"
-│   ├── koperasiglobal.ts      # Data koperasi nasional (read-only)
-│   ├── members.ts / db.ts     # Data anggota & akses DB (Cloud SQL)
-│   ├── session.ts             # State percakapan per user + TTL
-│   └── ...                    # menu, format, logger, notifications, dll.
-├── dashboard/                 # Dashboard web (React + Vite + Supabase)
-├── supabase/ · cloudsql/      # Skema & SQL database
-├── scripts/                   # Skrip uji (test-gemini, test-vertex)
-├── docs/screenshots/          # Tangkapan layar (dipakai README ini)
-├── assets/                    # Logo, dsb.
-├── COMMANDS.md                # Daftar lengkap semua perintah chat
-├── DEPLOY.md                  # Panduan deploy 24/7 di GCP
-├── extras/STACK.md            # Rincian tech stack
-└── .env.example               # Contoh konfigurasi
+EdigDaya/                          # Monorepo (Bun workspaces: apps/*)
+├── apps/
+│   ├── bot/                       # 🤖 Chatbot WhatsApp — paket "edig-bot"
+│   │   ├── src/                   # Kode bot (TypeScript, dijalankan Bun)
+│   │   │   ├── index.ts           # Entry point (start bot, hydrate data, cleanup sesi)
+│   │   │   ├── config.ts          # Konfigurasi terpusat dari .env (tanpa secret hardcoded)
+│   │   │   ├── whatsapp.ts        # Koneksi & event Baileys
+│   │   │   ├── router.ts          # Routing hybrid: menu → intent AI → chat
+│   │   │   ├── welcome.ts         # Welcome card ("mulai")
+│   │   │   ├── activation.ts      # Aktivasi (kilat / form 12 langkah)
+│   │   │   ├── periksaaktivasi.ts # Periksa anggota lama (No. Anggota)
+│   │   │   ├── ktp.ts             # OCR KTP (Cloud Vision)
+│   │   │   ├── voice.ts           # Voice note → teks (Cloud Speech-to-Text)
+│   │   │   ├── intent.ts          # Deteksi maksud kalimat bebas
+│   │   │   ├── ai.ts / vertex.ts  # Integrasi AI (Groq/Claude/Gemini & Vertex)
+│   │   │   ├── simpanan.ts        # Setor & saldo simpanan
+│   │   │   ├── preorder.ts        # Pre-Order (form user + command admin)
+│   │   │   ├── referral.ts        # Program referral "Gotong Royong"
+│   │   │   ├── koperasiglobal.ts  # Data koperasi nasional (read-only)
+│   │   │   ├── members.ts / db.ts # Data anggota & akses DB (Cloud SQL)
+│   │   │   ├── session.ts         # State percakapan per user + TTL
+│   │   │   └── ...                # menu, format, logger, notifications, campaigns, dll.
+│   │   ├── assets/                # Logo, dsb.
+│   │   ├── auth/                  # Sesi login WhatsApp (gitignored)
+│   │   ├── cloudsql/ · supabase/  # Skema & SQL database
+│   │   ├── docs/screenshots/      # Tangkapan layar (dipakai README ini)
+│   │   ├── extras/STACK.md        # Rincian tech stack
+│   │   ├── scripts/               # Skrip uji (test-gemini, test-vertex)
+│   │   ├── COMMANDS.md            # Daftar lengkap semua perintah chat
+│   │   ├── PANDUAN-SUPABASE.md    # Setup database Supabase
+│   │   └── .env.example           # Contoh konfigurasi bot
+│   └── dashboard/                 # 🖥️ Dashboard web — paket "edig-dashboard" (React + Bun)
+├── archive/legacy-dashboard/      # Dashboard lama (diarsipkan — jangan dipakai)
+├── scripts/deploy-vm.sh           # Bootstrap VM (GCE)
+├── ARCHITECTURE.md                # Peta arsitektur (satu solusi, dua muka)
+├── DEPLOY.md                      # Panduan deploy monorepo 24/7 di GCP
+└── package.json                   # Workspaces + skrip (dev:bot, dev:dashboard, …)
 ```
 
 ---
@@ -428,11 +442,12 @@ Keamanan dirancang sejak awal, mengacu pada praktik **OWASP** dan **UU PDP No. 2
 
 | Dokumen | Isi |
 |---|---|
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | **Peta arsitektur** sistem — satu solusi, dua muka (WhatsApp + web) |
+| **[DEPLOY.md](DEPLOY.md)** | Panduan deploy **monorepo 24/7** (bot + dashboard) di Google Cloud VM (systemd + Caddy) |
 | **[COMMANDS.md](apps/bot/COMMANDS.md)** | Daftar **lengkap semua perintah** chat (per peran: calon anggota, anggota, admin, demo) |
-| **[DEPLOY.md](apps/bot/DEPLOY.md)** | Panduan deploy bot **24/7** di Google Cloud VM (systemd) |
 | **[extras/STACK.md](apps/bot/extras/STACK.md)** | Rincian **tech stack**, dependency, & env var |
 | **[PANDUAN-SUPABASE.md](apps/bot/PANDUAN-SUPABASE.md)** | Setup database Supabase (dashboard) |
-| **[dashboard/](apps/dashboard/)** | Aplikasi **dashboard web** (React + Vite) |
+| **[apps/dashboard/](apps/dashboard/)** | Aplikasi **dashboard web** (React + Bun) |
 
 ---
 

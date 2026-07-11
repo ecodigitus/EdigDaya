@@ -1,4 +1,4 @@
-# 📖 Daftar Command — WhatsApp Chatbot Koperasi (EdigKop)
+# 📖 Daftar Command — WhatsApp Chatbot Koperasi (EdigDaya)
 
 Semua interaksi lewat **chat WhatsApp** (balas *angka* atau *kata kunci* — tidak case-sensitive).
 Bot bersifat *hybrid*: rule-based (menu/kata kunci) → intent AI (kalimat bebas) → ngobrol AI.

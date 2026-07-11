@@ -1,11 +1,11 @@
-# hackathon2026 — Dashboard Web Koperasi Digital
+# EdigDaya — Dashboard Web Koperasi Digital
 
 Dashboard web untuk koperasi digital: **portal anggota**, **portal pengurus**,
 dan **ringkasan nasional**. Full-stack di atas Bun — satu proses menyajikan
 **REST API** sekaligus **React SPA**.
 
 Bagian dari sistem yang lebih besar — **satu solusi, dua muka**: dashboard ini
-adalah muka **web**, sedangkan `../edigkop/` adalah muka **WhatsApp bot**.
+adalah muka **web**, sedangkan `../bot/` adalah muka **WhatsApp bot**.
 Keduanya berbagi **satu database** (Cloud SQL). Peta lengkap:
 [**`../ARCHITECTURE.md`**](../ARCHITECTURE.md).
 
