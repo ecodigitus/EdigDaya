@@ -8,6 +8,7 @@ import "./auth";
 import "./pengurus";
 import "./anggota";
 import "./anggotawa";
+import "./erat";
 import "./nasional";
 import "./akun";
 import "./preorder";

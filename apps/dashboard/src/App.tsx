@@ -11,6 +11,10 @@ import { WaSimpanan } from "./pages/wa/Simpanan";
 import { WaReferral } from "./pages/wa/Referral";
 import { WaProfil } from "./pages/wa/Profil";
 import { WaPinjaman } from "./pages/wa/Pinjaman";
+import { WaErat } from "./pages/wa/Erat";
+import { WaMisi } from "./pages/wa/Misi";
+import { WaUsaha } from "./pages/wa/Usaha";
+import { WaPengurus } from "./pages/wa/Pengurus";
 
 import { PengurusOverview } from "./pages/pengurus/Overview";
 import { PengurusAnggota } from "./pages/pengurus/Anggota";
@@ -77,6 +81,10 @@ function AuthedApp({ role }: { role: Role }) {
           <Route path="/transparansi" element={<AnggotaTransparansi />} />
           <Route path="/pengajuan" element={<AnggotaPengajuan />} />
           <Route path="/pinjaman" element={<WaPinjaman />} />
+          <Route path="/usaha" element={<WaUsaha />} />
+          <Route path="/misi" element={<WaMisi />} />
+          <Route path="/erat" element={<WaErat />} />
+          <Route path="/pengurus" element={<WaPengurus />} />
           <Route path="/profil" element={<WaProfil />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

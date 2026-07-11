@@ -1,8 +1,30 @@
 import { useApi } from "../../lib/useApi";
 import { PageHeader } from "../../components/page";
-import { Card, Avatar, StatusPill, FullscreenLoader, EmptyState } from "../../components/ui";
+import { Card, Avatar, StatusPill, SectionTitle, FullscreenLoader, EmptyState } from "../../components/ui";
 import { rupiah, angka, tanggalWaktu } from "../../lib/format";
 
+type Ktp = {
+  tempatTglLahir?: string;
+  golDarah?: string;
+  alamat?: string;
+  rtRw?: string;
+  kelDesa?: string;
+  agama?: string;
+  statusPerkawinan?: string;
+  pekerjaan?: string;
+  kewarganegaraan?: string;
+};
+type Pendaftaran = {
+  nik?: string;
+  jenisKelamin?: string;
+  email?: string;
+  nomorHp?: string;
+  provinsi?: string;
+  kabupaten?: string;
+  kecamatan?: string;
+  desa?: string;
+  ktp?: Ktp;
+};
 type Overview = {
   member: {
     no_anggota: string;
@@ -16,6 +38,7 @@ type Overview = {
     estimasi_shu: number;
     skor_keterlibatan: number;
     updated_at: string;
+    pendaftaran?: Pendaftaran | null;
   };
 };
 
@@ -53,8 +76,40 @@ export function WaProfil() {
           <Info label="Update terakhir" value={tanggalWaktu(m.updated_at)} />
         </dl>
       </Card>
+
+      {m.pendaftaran && <KtpCard p={m.pendaftaran} />}
     </>
   );
+}
+
+function KtpCard({ p }: { p: Pendaftaran }) {
+  const k: Ktp = p.ktp ?? {};
+  const wilayah = [p.desa, p.kecamatan, p.kabupaten, p.provinsi].filter(Boolean).join(", ");
+  return (
+    <Card className="mt-4 p-5">
+      <SectionTitle>Data Pribadi (KTP)</SectionTitle>
+      <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 mt-3 text-sm">
+        <Info label="NIK" value={maskNik(p.nik)} />
+        <Info label="Jenis Kelamin" value={p.jenisKelamin} />
+        <Info label="Tempat/Tgl Lahir" value={k.tempatTglLahir} />
+        <Info label="Gol. Darah" value={k.golDarah} />
+        <Info label="Agama" value={k.agama} />
+        <Info label="Status Perkawinan" value={k.statusPerkawinan} />
+        <Info label="Pekerjaan" value={k.pekerjaan} />
+        <Info label="Kewarganegaraan" value={k.kewarganegaraan} />
+        <Info label="Email" value={p.email} />
+        <Info label="No. HP" value={p.nomorHp} />
+        <Info label="Alamat KTP" value={[k.alamat, k.rtRw ? `RT/RW ${k.rtRw}` : "", k.kelDesa].filter(Boolean).join(", ")} />
+        <Info label="Wilayah" value={wilayah} />
+      </dl>
+    </Card>
+  );
+}
+
+/** Samarkan NIK (4 digit terakhir) — UU PDP. */
+function maskNik(nik?: string): string {
+  if (!nik) return "—";
+  return `${"•".repeat(Math.max(0, nik.length - 4))}${nik.slice(-4)}`;
 }
 
 function Info({ label, value }: { label: string; value?: string | null }) {

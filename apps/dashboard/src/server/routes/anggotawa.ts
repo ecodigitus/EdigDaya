@@ -22,7 +22,8 @@ route(
   async ({ session }) => {
     const no = waScope(session);
     const [m] = await sdb`
-      SELECT no_anggota, nama, phone, role, sejak, kode_referral, lencana, pinjaman,
+      SELECT no_anggota, nama, phone, role, sejak, kode_referral, lencana,
+             pinjaman, usaha, keuangan, pendaftaran,
              coalesce(poin, 0)::int AS poin,
              coalesce(estimasi_shu, 0)::float8 AS estimasi_shu,
              coalesce(skor_keterlibatan, 0)::int AS skor_keterlibatan,
@@ -32,6 +33,17 @@ route(
              updated_at
       FROM ${sdb(MEMBERS)} WHERE no_anggota = ${no} LIMIT 1`;
     if (!m) return err(404, "Data anggota tidak ditemukan.");
+    // Sebagian baris menyimpan kolom jsonb sebagai STRING (double-encoded) —
+    // normalisasi jadi objek agar frontend konsisten.
+    for (const f of ["usaha", "keuangan", "pendaftaran", "pinjaman"] as const) {
+      if (typeof m[f] === "string") {
+        try {
+          m[f] = JSON.parse(m[f] as string);
+        } catch {
+          m[f] = null;
+        }
+      }
+    }
     const total_simpanan =
       Number(m.simpanan_pokok) + Number(m.simpanan_wajib) + Number(m.simpanan_sukarela);
     return json({ member: m, total_simpanan });
@@ -59,6 +71,20 @@ route(
       jumlah_referral: Math.floor((m.poin ?? 0) / REWARD_POIN),
       reward_per_referral: { poin: REWARD_POIN, bonus_shu: REWARD_SHU },
     });
+  },
+  ANGGOTA_WA,
+);
+
+// GET /api/anggota-wa/pengurus — daftar pengurus koperasi (tabel tim edig_dev_pengurus).
+route(
+  "GET",
+  "/api/anggota-wa/pengurus",
+  async () => {
+    const data = await sdb`
+      SELECT id, coalesce(urutan, 0)::int AS urutan, nama, jabatan, no_hp, wilayah
+      FROM ${sdb(team("pengurus"))}
+      ORDER BY urutan ASC NULLS LAST, nama ASC`;
+    return json({ data });
   },
   ANGGOTA_WA,
 );

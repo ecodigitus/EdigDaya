@@ -40,13 +40,17 @@ const ANGGOTA_NAV: NavItem[] = [
 const WA_NAV: NavItem[] = [
   { to: "/", label: "Beranda", icon: "home", end: true },
   { to: "/simpanan", label: "Simpanan", icon: "savings" },
+  { to: "/pinjaman", label: "Pinjaman", icon: "account_balance" },
+  { to: "/usaha", label: "Usaha", icon: "store" },
   { to: "/produk", label: "Produk", icon: "storefront" },
-  { to: "/referral", label: "Referral", icon: "campaign" },
   { to: "/pre-order", label: "Pre-Order", icon: "shopping_cart" },
+  { to: "/referral", label: "Referral", icon: "campaign" },
+  { to: "/misi", label: "Poin & Misi", icon: "military_tech" },
+  { to: "/erat", label: "e-RAT (Voting)", icon: "how_to_vote" },
   { to: "/pengumuman", label: "Pengumuman", icon: "notifications_active" },
   { to: "/transparansi", label: "Transparansi", icon: "gavel" },
   { to: "/pengajuan", label: "Pembiayaan", icon: "request_quote" },
-  { to: "/pinjaman", label: "Pinjaman", icon: "account_balance" },
+  { to: "/pengurus", label: "Pengurus", icon: "groups" },
   { to: "/profil", label: "Profil", icon: "person" },
 ];
 
